@@ -7,11 +7,15 @@ Description: Provides a graphical interface for users to perform port scans and 
 import tkinter as tk
 from tkinter import messagebox, ttk
 import threading
-import subprocess
 import time
 import socket
 import queue
-from wireless import wireless_attacks
+
+# Import scanning backend functions
+from scanner.port_scanner import run_scan
+from wireless.wireless_attacks import run_attack
+from utils.chatbot import Chatbot
+from utils import ar_visualization
 
 class AnimatedProgressBar(tk.Canvas):
     def __init__(self, parent: tk.Widget, width: int = 700, height: int = 25, max_value: int = 100, **kwargs):
@@ -55,6 +59,9 @@ def get_default_port_range() -> str:
     """Return the default port range for scanning."""
     return "1-1000"
 
+# Initialize chatbot instance
+chatbot = Chatbot()
+
 def run_port_scan() -> None:
     """Initiate the port scan based on user input."""
     target = port_target_entry.get().strip()
@@ -79,38 +86,19 @@ def run_port_scan() -> None:
             time.sleep(0.1)
 
     def scan() -> None:
-        """Perform the port scan using the advanced port scanner script."""
+        """Perform the port scan using the scanning backend."""
         try:
-            process = subprocess.Popen(
-                ["python3", "advanced_port_scanner.py"],
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                bufsize=1,
-                universal_newlines=True,
-            )
-            process.stdin.write(target + "\\n")
-            process.stdin.write(port_range + "\\n")
-            process.stdin.flush()
-
-            total_lines = 100
-            line_count = 0
-
-            for line in process.stdout:
-                port_output_text.insert(tk.END, line)
+            # Use "ai" mode to enable AI-driven predictive scanning
+            for progress, line in run_scan(target, "ai"):
+                port_output_text.insert(tk.END, line + "\n")
                 port_output_text.see(tk.END)
-                line_count += 1
-                progress = min(line_count / total_lines * 100, 100)
                 port_progress_bar.update_progress(progress)
-
-            process.wait()
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred during the scan: {str(e)}")
         finally:
             port_scan_done.set()
             elapsed = time.time() - start_time
-            port_output_text.insert(tk.END, f"\\nScan completed in {elapsed:.2f} seconds.\\n")
+            port_output_text.insert(tk.END, f"\nScan completed in {elapsed:.2f} seconds.\n")
             port_scan_button.config(state=tk.NORMAL)
             port_progress_bar.update_progress(100)
             port_output_text.config(state=tk.DISABLED)
@@ -139,7 +127,7 @@ def run_wireless_attack() -> None:
         while True:
             try:
                 msg = log_queue.get(timeout=0.1)
-                wireless_output_text.insert(tk.END, msg + "\\n")
+                wireless_output_text.insert(tk.END, msg + "\n")
                 wireless_output_text.see(tk.END)
             except queue.Empty:
                 if wireless_attack_done.is_set():
@@ -159,14 +147,14 @@ def run_wireless_attack() -> None:
                 log_queue.put(msg)
         logger = QueueLogger()
         try:
-            wireless_attacks.run_attack(target)
+            run_attack(target)
             logger.info("Wireless attack finished")
         except Exception as e:
             logger.info(f"Error: {e}")
         finally:
             wireless_attack_done.set()
             elapsed = time.time() - start_time
-            log_queue.put(f"\\nWireless attack completed in {elapsed:.2f} seconds.")
+            log_queue.put(f"\nWireless attack completed in {elapsed:.2f} seconds.")
             wireless_attack_button.config(state=tk.NORMAL)
             wireless_progress_bar.update_progress(100)
             wireless_output_text.config(state=tk.DISABLED)
@@ -176,10 +164,44 @@ def run_wireless_attack() -> None:
     threading.Thread(target=update_elapsed, daemon=True).start()
     threading.Thread(target=attack, daemon=True).start()
 
+# Chatbot interaction functions and UI
+
+def process_chat_input() -> None:
+    user_input = chatbot_input.get().strip()
+    if not user_input:
+        return
+    response = chatbot.process_input(user_input)
+    chatbot_output.config(state=tk.NORMAL)
+    chatbot_output.insert(tk.END, f"> {user_input}\n{response}\n\n")
+    chatbot_output.see(tk.END)
+    chatbot_output.config(state=tk.DISABLED)
+    chatbot_input.delete(0, tk.END)
+
+def start_ar_visualization() -> None:
+    """Start the AR network visualization."""
+    # For now, just show a message box as placeholder
+    messagebox.showinfo("AR Visualization", "Starting AR network visualization (placeholder).")
+    # In a native app, this would launch ARKit-based visualization
+    # Here we call the placeholder function
+    ar_visualization.start_ar_visualization(None)
+
+# Additional UI/UX polish: add hover effects and tooltips for buttons
+
+def on_enter(event):
+    event.widget.config(bg="#006600")
+
+def on_leave(event):
+    event.widget.config(bg="#004400")
+
+# Apply hover effects to buttons
+for btn in [port_scan_button, wireless_attack_button, ar_start_button]:
+    btn.bind("<Enter>", on_enter)
+    btn.bind("<Leave>", on_leave)
+
 # Initialize the main GUI window
 root = tk.Tk()
 root.title("Advanced Port Scanner GUI")
-root.geometry("800x650")
+root.geometry("800x850")
 root.configure(bg="#000000")
 
 tab_control = ttk.Notebook(root)
@@ -231,6 +253,27 @@ wireless_elapsed_label.grid(row=3, column=0, columnspan=2, pady=5)
 wireless_output_text = tk.Text(wireless_tab, height=20, width=90, fg="#00FF00", bg="#000000", font=("Consolas", 11, "bold"), insertbackground="#00FF00")
 wireless_output_text.grid(row=4, column=0, columnspan=2, padx=5, pady=5)
 wireless_output_text.config(state=tk.DISABLED)
+
+# Chatbot Tab
+chatbot_tab = ttk.Frame(tab_control)
+tab_control.add(chatbot_tab, text="Chatbot")
+
+chatbot_output = tk.Text(chatbot_tab, height=20, width=90, fg="#00FF00", bg="#000000", font=("Consolas", 11, "bold"), insertbackground="#00FF00")
+chatbot_output.grid(row=0, column=0, padx=5, pady=5)
+
+chatbot_input = tk.Entry(chatbot_tab, width=90, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
+chatbot_input.grid(row=1, column=0, padx=5, pady=5)
+chatbot_input.bind("<Return>", lambda event: process_chat_input())
+
+# AR Visualization Tab
+ar_tab = ttk.Frame(tab_control)
+tab_control.add(ar_tab, text="AR Visualization")
+
+ar_label = tk.Label(ar_tab, text="AR Network Visualization Placeholder", fg="#00FF00", bg="#000000", font=("Consolas", 14, "bold"))
+ar_label.pack(padx=10, pady=10)
+
+ar_start_button = tk.Button(ar_tab, text="Start AR Visualization", command=start_ar_visualization, bg="#004400", fg="#00FF00", font=("Consolas", 14, "bold"))
+ar_start_button.pack(pady=10)
 
 # Auto-fill local IP in target fields
 local_ip = get_local_ip()

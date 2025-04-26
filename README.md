@@ -54,21 +54,61 @@ Perfect for:
 
 ---
 
-## 🧱 Project Structure
+## 📥 Installation Instructions
 
-```bash
-PORT-SCANNER/
-├── auto_scan.py           # Background scan runner
-├── gui.py                 # GUI frontend using Tkinter
-├── main.py                # Main controller file
-├── shodan_scan.py         # Shodan integration module
-├── scanner/               # Core nmap-based scan logic
-├── integrations/          # Third-party API integrations
-├── reports/               # Auto-generated reports
-├── utils/                 # Helper scripts
-├── wireless/              # Wireless network scan modules
-└── requirements.txt       # All dependencies
+To get started with the `PORT-SCANNER`, follow these steps:
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/morningstarxcdcode/port-scanner.git
+   cd port-scanner
+   ```
+
+2. **Install Dependencies**:
+   Make sure you have Python 3.13 installed. Then, install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Application**:
+   You can start the application by running:
+   ```bash
+   python main.py
+   ```
+
+---
+
+## 🛠️ Usage Examples
+
+### Targeting Specific Ports
+
+To scan specific ports, you can specify the port range in the input field. For example, to scan ports 22 (SSH) and 80 (HTTP), you can enter:
+
 ```
+22,80
+```
+
+### Using Nmap Options
+
+You can also utilize various `nmap` options by modifying the command in the `advanced_port_scanner.py` file. For example, to enable OS detection, you can add the `-O` flag:
+
+```python
+subprocess.Popen(["nmap", "-O", target, port_range])
+```
+
+This will provide additional information about the operating system of the target.
+
+---
+
+## 📝 Contribution Guidelines
+
+Contributions are welcome! If you would like to contribute to the project, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them with a clear message.
+4. Push your changes to your forked repository.
+5. Create a pull request to the main repository.
 
 ---
 
@@ -178,80 +218,4 @@ Add a dynamic snake animation to your README to showcase your GitHub activity in
 **Steps:**
 
 1. **Set Up the Workflow:**
-   - Navigate to your repository's **Actions** tab.
-   - Click on **New Workflow** and choose **set up a workflow yourself**.
-   - Replace the content with the following:
-
-     ```yaml
-     name: Generate Snake Animation
-
-     on:
-       schedule:
-         - cron: "0 0 * * *"  # Runs daily at midnight
-       workflow_dispatch:
-
-     jobs:
-       build:
-         runs-on: ubuntu-latest
-         steps:
-           - uses: Platane/snk@master
-             with:
-               github_user_name: YOUR_USERNAME
-               outputs: dist/github-contribution-grid-snake.svg
-           - uses: crazy-max/ghaction-github-pages@v2
-             with:
-               target_branch: output
-               build_dir: dist
-             env:
-               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-     ```
-
-   - Replace `YOUR_USERNAME` with your GitHub username.
-
-2. **Add to README:**
-   - After the workflow runs successfully, add the following to your `README.md`:
-
-     ```markdown
-     ![Snake animation](https://github.com/YOUR_USERNAME/YOUR_USERNAME/blob/output/github-contribution-grid-snake.svg)
-     ```
-
-   - Replace `YOUR_USERNAME` with your GitHub username.
-
-This animation will display your contributions in a snake-like pattern, adding a dynamic visual to your profile.
-
----
-
-## 📂 Assets Directory Structure
-
-Organize your assets for clarity and maintainability:
-
-```
-PORT-SCANNER/
-├── assets/
-│   ├── gui-demo.gif
-│   ├── live-scan.gif
-│   ├── threat-report.png
-│   └── github-contribution-grid-snake.svg
-├── README.md
-└── ...
-```
-
----
-
-## 🛠️ Tools for Creating Visuals
-
-- **Gifox (macOS):** For high-quality screen recordings.
-- **Peek (Linux):** Simple GIF recorder for Linux.
-- **asciinema:** Record terminal sessions.
-- **svg-term-cli:** Convert asciinema recordings to SVG animations.
-- **ImageOptim / TinyPNG:** Compress images without losing quality.
-
----
-
-## 📦 Final Touches
-
-- Ensure all media files are optimized for web (preferably under 10MB).
-- Use descriptive alt texts for accessibility.
-- Regularly update visuals to reflect the latest features.
-
-By incorporating these enhancements, your `PORT-SCANNER` README will not only be informative but also visually engaging, capturing the attention of users and contributors alike.
+   - Navigate to your repository's **Actions

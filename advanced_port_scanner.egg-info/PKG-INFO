@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: advanced-port-scanner
+Version: 1.0.0
+Summary: A highly advanced modular port scanner and wireless attack tool
+Author: morningstar
+Requires-Python: >=3.7
+License-File: LICENSE
+Requires-Dist: requests
+Dynamic: author
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

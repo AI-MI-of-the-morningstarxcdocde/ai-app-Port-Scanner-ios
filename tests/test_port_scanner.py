@@ -1,4 +1,10 @@
 import unittest
+import sys
+import os
+
+# Add the project root directory to sys.path to fix import issues
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from scanner.port_scanner import run_scan  # Adjusted import based on the actual function
 
 class TestPortScanner(unittest.TestCase):

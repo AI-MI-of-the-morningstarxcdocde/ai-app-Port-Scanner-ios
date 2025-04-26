@@ -10,6 +10,8 @@ import requests  # type: ignore
 import threading
 from typing import List, Tuple, Optional
 import ipaddress  # Importing ipaddress for IP validation
+from utils.blockchain_logging import log_scan_result
+from ai.predictive_model import predict_open_ports
 
 COMMON_PORTS = [21, 22, 23, 25, 53, 80, 110, 143, 443, 3306, 8080, 8081, 8443, 8888]
 
@@ -61,7 +63,8 @@ def scan_port(target: str, port: int, results: List[Tuple[int, bool, Optional[st
 
 def run_scan(target: str, ports: str = "1-65535", scan_type: str = "all") -> None:
     """
-    Scans common ports on the target IP concurrently and prints the results.
+    Scans ports on the target IP concurrently and prints the results.
+    Uses AI-driven prediction to optimize port selection.
     """
     # Validate the IP address
     try:
@@ -72,28 +75,32 @@ def run_scan(target: str, ports: str = "1-65535", scan_type: str = "all") -> Non
     print(f"\nScanning target: {target}\n")
     results: List[Tuple[int, bool, Optional[str], Optional[str]]] = []
     threads = []
-    # Parse ports string to list of ints
-    port_list = []
-    if ports == "all":
-        port_list = COMMON_PORTS
+    # Determine ports to scan
+    if ports == "ai":
+        port_list = predict_open_ports(target)
     else:
-        try:
-            if "," in ports:
-                parts = ports.split(",")
-                for part in parts:
-                    if "-" in part:
-                        start, end = part.split("-")
-                        port_list.extend(range(int(start), int(end)+1))
-                    else:
-                        port_list.append(int(part))
-            elif "-" in ports:
-                start, end = ports.split("-")
-                port_list = list(range(int(start), int(end)+1))
-            else:
-                port_list = [int(ports)]
-        except Exception:
-            print("Invalid port range format. Using default common ports.")
+        # Parse ports string to list of ints
+        port_list = []
+        if ports == "all":
             port_list = COMMON_PORTS
+        else:
+            try:
+                if "," in ports:
+                    parts = ports.split(",")
+                    for part in parts:
+                        if "-" in part:
+                            start, end = part.split("-")
+                            port_list.extend(range(int(start), int(end)+1))
+                        else:
+                            port_list.append(int(part))
+                elif "-" in ports:
+                    start, end = ports.split("-")
+                    port_list = list(range(int(start), int(end)+1))
+                else:
+                    port_list = [int(ports)]
+            except Exception:
+                print("Invalid port range format. Using default common ports.")
+                port_list = COMMON_PORTS
 
     for port in port_list:
         t = threading.Thread(target=scan_port, args=(target, port, results))
@@ -101,6 +108,19 @@ def run_scan(target: str, ports: str = "1-65535", scan_type: str = "all") -> Non
         t.start()
     for t in threads:
         t.join()
+
+    # Log scan results to blockchain ledger
+    scan_log = {
+        "target": target,
+        "ports_scanned": len(port_list),
+        "open_ports": [port for port, is_open, _, _ in results if is_open],
+        "scan_details": [
+            {"port": port, "open": is_open, "service": service, "vulnerability": vul_status}
+            for port, is_open, service, vul_status in results
+        ],
+    }
+    log_scan_result(scan_log)
+
     for port, is_open, service, vul_status in sorted(results):
         if is_open:
             print(f"✅ Port {port} is OPEN | Service: {service}")
