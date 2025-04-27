@@ -1,0 +1,89 @@
+// MARK: - Common
+"ok" = "OK";
+"cancel" = "Cancel";
+"done" = "Done";
+"error" = "Error";
+"retry" = "Try Again";
+"loading" = "Loading...";
+"upgrade_premium" = "Upgrade to Premium";
+"premium_feature" = "Premium Feature";
+
+// MARK: - Authentication
+"auth_required" = "Authentication Required";
+"auth_scan_message" = "Authenticate to start scanning";
+"auth_failed" = "Authentication failed";
+
+// MARK: - Port Scanner
+"enter_target" = "Enter target IP";
+"enter_ports" = "Enter port range (e.g. 1-1000)";
+"start_scan" = "Start Scan";
+"scanning" = "Scanning...";
+"scan_results" = "Scan Results";
+"no_results" = "No results found";
+
+// MARK: - AI Scanner
+"ai_scan" = "AI Predictive Scan";
+"start_ai_scan" = "Start AI Scan";
+"ai_analyzing" = "Analyzing...";
+"ai_premium_message" = "Unlock AI predictive scanning by upgrading to Premium";
+
+// MARK: - Wireless Attack
+"wireless_attack" = "Wireless Attack";
+"start_attack" = "Start Wireless Attack";
+"attacking" = "Attacking...";
+"wireless_premium_message" = "Unlock wireless attack capabilities by upgrading to Premium";
+
+// MARK: - Analytics
+"analytics" = "Analytics";
+"total_scans" = "Total Scans";
+"open_ports" = "Open Ports";
+"vulnerabilities" = "Vulnerabilities";
+"time_spent" = "Time Spent";
+"weekly_activity" = "Weekly Activity";
+"recent_activity" = "Recent Activity";
+"no_analytics" = "No analytics data available";
+"analytics_premium_message" = "Unlock detailed analytics by upgrading to Premium";
+
+// MARK: - Chatbot
+"chat_welcome" = "Hello! I'm your AI security assistant. How can I help you today?";
+"type_message" = "Type your message...";
+"chat_premium_message" = "Unlock AI assistant by upgrading to Premium";
+
+// MARK: - Settings
+"settings" = "Settings";
+"account" = "Account";
+"security" = "Security";
+"appearance" = "Appearance";
+"about" = "About";
+"premium_account" = "Premium Account";
+"use_biometrics" = "Use Face ID / Touch ID";
+"theme_settings" = "Theme Settings";
+"version" = "Version";
+"privacy_policy" = "Privacy Policy";
+"terms_of_service" = "Terms of Service";
+
+// MARK: - Theme
+"use_system_theme" = "Use System Theme";
+"dark_mode" = "Dark Mode";
+"accent_color" = "Accent Color";
+
+// MARK: - Achievements
+"achievements" = "Achievements";
+"first_scan" = "First Scan";
+"first_scan_desc" = "Complete your first port scan";
+"power_user" = "Power User";
+"power_user_desc" = "Complete 10 scans";
+"wireless_expert" = "Wireless Expert";
+"wireless_expert_desc" = "Perform your first wireless attack";
+"ai_master" = "AI Master";
+"ai_master_desc" = "Use AI predictive scanning";
+"ar_explorer" = "AR Explorer";
+"ar_explorer_desc" = "Visualize network in AR";
+
+// MARK: - Errors
+"invalid_ip" = "Invalid IP address";
+"invalid_ports" = "Invalid port range";
+"network_error" = "Network error";
+"auth_error" = "Authentication error";
+"unknown_error" = "An unknown error occurred";
+"please_try_again" = "Please try again";

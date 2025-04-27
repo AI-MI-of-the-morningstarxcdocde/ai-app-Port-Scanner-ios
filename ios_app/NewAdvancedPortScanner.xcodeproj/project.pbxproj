@@ -1,0 +1,185 @@
+/* Cleaned Xcode project file for AdvancedPortScanner iOS app */
+
+{
+  archiveVersion = 1;
+  classes = {
+  };
+  objectVersion = 55;
+  objects = {
+
+/* Begin PBXBuildFile section */
+    100000000000000000000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000011 /* ContentView.swift */; };
+    100000000000000000000002 /* WirelessAttackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000012 /* WirelessAttackView.swift */; };
+    100000000000000000000003 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000013 /* ThemeManager.swift */; };
+    100000000000000000000004 /* GamificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000014 /* GamificationView.swift */; };
+    100000000000000000000005 /* ChatbotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000015 /* ChatbotView.swift */; };
+    100000000000000000000006 /* AIPredictiveScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000016 /* AIPredictiveScanView.swift */; };
+    100000000000000000000007 /* ARVisualizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000017 /* ARVisualizationView.swift */; };
+    100000000000000000000008 /* MonetizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000018 /* MonetizationView.swift */; };
+    100000000000000000000009 /* AnalyticsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000019 /* AnalyticsDashboardView.swift */; };
+    10000000000000000000000A /* AdvancedFeaturesIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10000000000000000000001A /* AdvancedFeaturesIntegration.swift */; };
+    10000000000000000000000B /* SecurityEnhancements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10000000000000000000001B /* SecurityEnhancements.swift */; };
+    10000000000000000000000C /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10000000000000000000001C /* App.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+    100000000000000000000011 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+    100000000000000000000012 /* WirelessAttackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WirelessAttackView.swift; sourceTree = "<group>"; };
+    100000000000000000000013 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+    100000000000000000000014 /* GamificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamificationView.swift; sourceTree = "<group>"; };
+    100000000000000000000015 /* ChatbotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatbotView.swift; sourceTree = "<group>"; };
+    100000000000000000000016 /* AIPredictiveScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPredictiveScanView.swift; sourceTree = "<group>"; };
+    100000000000000000000017 /* ARVisualizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARVisualizationView.swift; sourceTree = "<group>"; };
+    100000000000000000000018 /* MonetizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonetizationView.swift; sourceTree = "<group>"; };
+    100000000000000000000019 /* AnalyticsDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsDashboardView.swift; sourceTree = "<group>"; };
+    10000000000000000000001A /* AdvancedFeaturesIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedFeaturesIntegration.swift; sourceTree = "<group>"; };
+    10000000000000000000001B /* SecurityEnhancements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityEnhancements.swift; sourceTree = "<group>"; };
+    10000000000000000000001C /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+    100000000000000000000010 = {
+      isa = PBXGroup;
+      children = (
+        100000000000000000000011 /* ContentView.swift */,
+        100000000000000000000012 /* WirelessAttackView.swift */,
+        100000000000000000000013 /* ThemeManager.swift */,
+        100000000000000000000014 /* GamificationView.swift */,
+        100000000000000000000015 /* ChatbotView.swift */,
+        100000000000000000000016 /* AIPredictiveScanView.swift */,
+        100000000000000000000017 /* ARVisualizationView.swift */,
+        100000000000000000000018 /* MonetizationView.swift */,
+        100000000000000000000019 /* AnalyticsDashboardView.swift */,
+        10000000000000000000001A /* AdvancedFeaturesIntegration.swift */,
+        10000000000000000000001B /* SecurityEnhancements.swift */,
+        10000000000000000000001C /* App.swift */,
+      );
+      sourceTree = "<group>";
+      name = "AdvancedPortScanner";
+    };
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+    10000000000000000000000F /* Project object */ = {
+      isa = PBXProject;
+      attributes = {
+        LastUpgradeCheck = 1400;
+        ORGANIZATIONNAME = "morningstar";
+        TargetAttributes = {
+          10000000000000000000000E = {
+            CreatedOnToolsVersion = 1400;
+          };
+        };
+      };
+      buildConfigurationList = 10000000000000000000000D /* Build configuration list for PBXProject */;
+      compatibilityVersion = "Xcode 14.0";
+      developmentRegion = en;
+      hasScannedForEncodings = 0;
+      knownRegions = (
+        en,
+      );
+      mainGroup = 100000000000000000000010;
+      projectDirPath = "";
+      projectRoot = "";
+      targets = (
+        10000000000000000000000E /* AdvancedPortScanner */,
+      );
+    };
+/* End PBXProject section */
+
+/* Begin PBXNativeTarget section */
+    10000000000000000000000E /* AdvancedPortScanner */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = 10000000000000000000000B /* Build configuration list for PBXNativeTarget "AdvancedPortScanner" */;
+      buildPhases = (
+        10000000000000000000000B /* Sources */,
+        10000000000000000000000A /* Frameworks */,
+        100000000000000000000009 /* Resources */,
+      );
+      buildRules = (
+      );
+      dependencies = (
+      );
+      name = "AdvancedPortScanner";
+      productName = "AdvancedPortScanner";
+      productReference = 100000000000000000000008 /* AdvancedPortScanner.app */;
+      productType = "com.apple.product-type.application";
+    };
+/* End PBXNativeTarget section */
+
+/* Begin PBXSourcesBuildPhase section */
+    10000000000000000000000B /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        100000000000000000000001 /* ContentView.swift in Sources */,
+        100000000000000000000002 /* WirelessAttackView.swift in Sources */,
+        100000000000000000000003 /* ThemeManager.swift in Sources */,
+        100000000000000000000004 /* GamificationView.swift in Sources */,
+        100000000000000000000005 /* ChatbotView.swift in Sources */,
+        100000000000000000000006 /* AIPredictiveScanView.swift in Sources */,
+        100000000000000000000007 /* ARVisualizationView.swift in Sources */,
+        100000000000000000000008 /* MonetizationView.swift in Sources */,
+        100000000000000000000009 /* AnalyticsDashboardView.swift in Sources */,
+        10000000000000000000000A /* AdvancedFeaturesIntegration.swift in Sources */,
+        10000000000000000000000B /* SecurityEnhancements.swift in Sources */,
+        10000000000000000000000C /* App.swift in Sources */,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+    10000000000000000000000C /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+        CODE_SIGN_IDENTITY = "-";
+        DEVELOPMENT_TEAM = "";
+        INFOPLIST_FILE = ios_app/Info.plist;
+        IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+        LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+        PRODUCT_BUNDLE_IDENTIFIER = "com.morningstar.AdvancedPortScanner";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        SWIFT_VERSION = 5.0;
+      };
+      name = Debug;
+    };
+    10000000000000000000000D /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+        CODE_SIGN_IDENTITY = "-";
+        DEVELOPMENT_TEAM = "";
+        INFOPLIST_FILE = ios_app/Info.plist;
+        IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+        LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+        PRODUCT_BUNDLE_IDENTIFIER = "com.morningstar.AdvancedPortScanner";
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        SWIFT_VERSION = 5.0;
+      };
+      name = Release;
+    };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+    10000000000000000000000B /* Build configuration list for PBXNativeTarget "AdvancedPortScanner" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        10000000000000000000000C /* Debug */,
+        10000000000000000000000D /* Release */,
+      );
+      defaultConfigurationName = Debug;
+    };
+    10000000000000000000000D /* Build configuration list for PBXProject "AdvancedPortScanner" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        10000000000000000000000C /* Debug */,
+        10000000000000000000000D /* Release */,
+      );
+      defaultConfigurationName = Debug;
+    };
+/* End XCConfigurationList section */
+  };
+  rootObject = 10000000000000000000000F /* Project object */;
+}
