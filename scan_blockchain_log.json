@@ -78,5 +78,45 @@
       ]
     },
     "hash": "14096ffb33f8d3b442d294586ae9b34e9334b838c1eee9780d7c65ce3032d615"
+  },
+  {
+    "timestamp": "2025-04-28T05:55:50.912981Z",
+    "data": {
+      "target": "127.0.0.1",
+      "ports_scanned": 1,
+      "open_ports": [],
+      "scan_details": [
+        {
+          "port": 9999,
+          "open": false,
+          "service": null,
+          "vulnerability": null
+        }
+      ]
+    },
+    "hash": "33af6d0e3a63c9f128aeb4d301c468e70f56a3248496c744a7c7182dda36c62b"
+  },
+  {
+    "timestamp": "2025-04-28T05:55:50.913793Z",
+    "data": {
+      "target": "127.0.0.1",
+      "ports_scanned": 2,
+      "open_ports": [],
+      "scan_details": [
+        {
+          "port": 22,
+          "open": false,
+          "service": null,
+          "vulnerability": null
+        },
+        {
+          "port": 80,
+          "open": false,
+          "service": null,
+          "vulnerability": null
+        }
+      ]
+    },
+    "hash": "a8db1756ad38f66b5d2c8069211258788f352b4a0a3805f64f434c68d14b4dda"
   }
 ]

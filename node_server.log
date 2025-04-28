@@ -1,0 +1,50 @@
+NX MCP Server running on port 9686
+NX MCP Server running on port 9686
+Received request: GET /health
+Health check request served
+Received SIGTERM, shutting down server...
+NX MCP Server running on port 9686
+Received request: GET /health
+Health check request served
+Received request: GET /health
+Health check request served
+Received request: GET /health
+Health check request served
+Received request: GET /health
+Health check request served
+Received SIGTERM, shutting down server...
+NX MCP Server running on port 9686
+Received request: GET /health
+Health check request served
+Received request: GET /sse
+SSE connection established
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Sent heartbeat message
+Received SIGTERM, shutting down server...
+NX MCP Server running on port 9686
+Received request: GET /health
+Health check request served

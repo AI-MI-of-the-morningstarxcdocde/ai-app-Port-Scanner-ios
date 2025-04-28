@@ -1,0 +1,43 @@
+platform :ios, '17.0'
+use_frameworks!
+
+workspace 'PortScanner'
+project 'PortScanner'
+
+target 'PortScanner' do
+  # UI & Architecture
+  pod 'SwiftUI-Navigation'
+  pod 'Combine'
+  
+  # Network & Security
+  pod 'Alamofire'
+  pod 'KeychainAccess'
+  pod 'CryptoSwift'
+  
+  # AR & Visualization
+  pod 'ARKit-CoreLocation'
+  pod 'SceneKit'
+  
+  # Analytics & ML
+  pod 'Firebase/Analytics'
+  pod 'CoreML'
+  
+  # Testing
+  target 'PortScannerTests' do
+    inherit! :search_paths
+    pod 'Quick'
+    pod 'Nimble'
+  end
+
+  target 'PortScannerUITests' do
+    inherit! :search_paths
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
+    end
+  end
+end

@@ -1,0 +1,39 @@
+name: PortScanner
+options:
+  bundleIdPrefix: com.morningstar
+  deploymentTarget:
+    iOS: 17.0
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+  createIntermediateGroups: true
+
+targets:
+  PortScanner:
+    type: application
+    platform: iOS
+    sources: 
+      - path: PortScanner/Sources
+    settings:
+      base:
+        INFOPLIST_FILE: PortScanner/Sources/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.morningstar.portscanner
+        DEVELOPMENT_TEAM: YOUR_TEAM_ID
+    info:
+      path: PortScanner/Sources/Info.plist
+      properties:
+        CFBundleName: Port Scanner
+        CFBundleDisplayName: Port Scanner
+        CFBundlePackageType: APPL
+        CFBundleShortVersionString: 1.0.0
+        CFBundleVersion: 1
+        UILaunchStoryboardName: LaunchScreen
+        UIMainStoryboardFile: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        NSCameraUsageDescription: "AR features require camera access"
+        NSLocalNetworkUsageDescription: "Required for port scanning"
+        UIRequiredDeviceCapabilities: [armv7]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight

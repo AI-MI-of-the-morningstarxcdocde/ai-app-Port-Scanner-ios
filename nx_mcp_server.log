@@ -1,0 +1,95 @@
+2025-04-28 13:47:42 [INFO] Starting nx-mcp server in daemon mode with PID 76569
+2025-04-28 13:47:42 [INFO] Starting nx-mcp server in daemon mode with PID 76569
+2025-04-28 13:47:42 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 13:47:42 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 13:47:42 [INFO] nx daemon started successfully
+2025-04-28 13:47:42 [INFO] nx daemon started successfully
+2025-04-28 13:47:42 [INFO] Starting SSE server with command: node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 13:47:42 [INFO] Starting SSE server with command: node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 13:47:44 [WARNING] SSE server health check couldn't be completed: HTTP Error 404: Not Found
+2025-04-28 13:47:44 [WARNING] SSE server health check couldn't be completed: HTTP Error 404: Not Found
+2025-04-28 13:47:44 [INFO] Continuing anyway as the process seems to have started
+2025-04-28 13:47:44 [INFO] Continuing anyway as the process seems to have started
+2025-04-28 13:47:44 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 13:47:44 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 13:47:44 [INFO] nx-mcp server started successfully in daemon mode
+2025-04-28 13:47:44 [INFO] nx-mcp server started successfully in daemon mode
+2025-04-28 14:04:55 [INFO] Restarting nx-mcp server...
+2025-04-28 14:04:55 [ERROR] No PID file found. Server may not be running.
+2025-04-28 14:04:56 [ERROR] Port 9686 is already in use. Attempting to free it...
+2025-04-28 14:04:56 [INFO] Killed process 58637
+76611 using port 9686
+2025-04-28 14:04:57 [ERROR] Unable to free port 9686 for restart. Exiting.
+2025-04-28 14:16:30 [ERROR] No PID file found. Server may not be running.
+2025-04-28 14:16:30 [ERROR] Failed to stop the server.
+2025-04-28 14:16:41 [ERROR] No PID file found. Server may not be running.
+2025-04-28 14:16:41 [ERROR] Failed to stop the server.
+2025-04-28 14:23:36 [INFO] Force killing all nx-mcp related processes
+2025-04-28 14:23:36 [INFO] All nx-mcp related processes should be terminated
+2025-04-28 14:40:42 [INFO] Starting nx-mcp server in daemon mode with PID 83967
+2025-04-28 14:40:42 [INFO] Starting nx-mcp server in daemon mode with PID 83967
+2025-04-28 14:40:42 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 14:40:42 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 14:40:42 [INFO] nx daemon started successfully
+2025-04-28 14:40:42 [INFO] nx daemon started successfully
+2025-04-28 14:40:42 [INFO] Starting SSE server with command: /Users/morningstar/.nvm/versions/node/v22.14.0/bin/node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 14:40:42 [INFO] Starting SSE server with command: /Users/morningstar/.nvm/versions/node/v22.14.0/bin/node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 14:40:44 [INFO] SSE server health check passed
+2025-04-28 14:40:44 [INFO] SSE server health check passed
+2025-04-28 14:40:44 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 14:40:44 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 14:40:44 [INFO] nx-mcp server started successfully in daemon mode
+2025-04-28 14:40:44 [INFO] nx-mcp server started successfully in daemon mode
+2025-04-28 14:41:31 [INFO] Node.js server (PID 84009) stopped.
+2025-04-28 14:41:31 [INFO] Server has been stopped successfully.
+2025-04-28 14:41:46 [WARNING] No server processes found to stop, but cleaned up any stale PID files.
+2025-04-28 14:41:50 [INFO] Starting nx-mcp server in daemon mode with PID 85571
+2025-04-28 14:41:50 [INFO] Starting nx-mcp server in daemon mode with PID 85571
+2025-04-28 14:41:50 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 14:41:50 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 14:41:50 [INFO] nx daemon started successfully
+2025-04-28 14:41:50 [INFO] nx daemon started successfully
+2025-04-28 14:41:50 [INFO] Starting SSE server with command: /Users/morningstar/.nvm/versions/node/v22.14.0/bin/node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 14:41:50 [INFO] Starting SSE server with command: /Users/morningstar/.nvm/versions/node/v22.14.0/bin/node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 14:41:52 [INFO] SSE server health check passed
+2025-04-28 14:41:52 [INFO] SSE server health check passed
+2025-04-28 14:41:52 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 14:41:52 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 14:41:52 [INFO] nx-mcp server started successfully in daemon mode
+2025-04-28 14:41:52 [INFO] nx-mcp server started successfully in daemon mode
+2025-04-28 14:42:21 [INFO] Server is running with PID 85613.
+2025-04-28 14:42:21 [INFO] SSE server is responsive and healthy.
+2025-04-28 14:43:05 [INFO] Server is running with PID 85613.
+2025-04-28 14:43:05 [INFO] SSE server is responsive and healthy.
+2025-04-28 14:43:50 [INFO] Server is running with PID 85613.
+2025-04-28 14:43:50 [INFO] SSE server is responsive and healthy.
+2025-04-28 14:46:30 [INFO] Restarting nx-mcp server...
+2025-04-28 14:46:31 [INFO] Node.js server (PID 85613) stopped.
+2025-04-28 14:46:32 [INFO] Starting nx-mcp server in daemon mode with PID 86690
+2025-04-28 14:46:32 [INFO] Starting nx-mcp server in daemon mode with PID 86690
+2025-04-28 14:46:32 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 14:46:32 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 14:46:32 [INFO] nx daemon started successfully
+2025-04-28 14:46:32 [INFO] nx daemon started successfully
+2025-04-28 14:46:32 [INFO] Starting SSE server with command: /Users/morningstar/.nvm/versions/node/v22.14.0/bin/node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 14:46:32 [INFO] Starting SSE server with command: /Users/morningstar/.nvm/versions/node/v22.14.0/bin/node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 14:46:34 [INFO] SSE server health check passed
+2025-04-28 14:46:34 [INFO] SSE server health check passed
+2025-04-28 14:46:34 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 14:46:34 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 14:46:34 [INFO] nx-mcp server restarted successfully
+2025-04-28 14:46:34 [INFO] nx-mcp server restarted successfully
+2025-04-28 15:04:40 [INFO] Starting nx-mcp server in daemon mode with PID 88299
+2025-04-28 15:04:40 [INFO] Starting nx-mcp server in daemon mode with PID 88299
+2025-04-28 15:04:40 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 15:04:40 [INFO] Starting nx daemon with command: /Users/morningstar/Port-Scanner/nx daemon start
+2025-04-28 15:04:40 [INFO] nx daemon started successfully
+2025-04-28 15:04:40 [INFO] nx daemon started successfully
+2025-04-28 15:04:40 [INFO] Starting SSE server with command: /Users/morningstar/.nvm/versions/node/v22.14.0/bin/node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 15:04:40 [INFO] Starting SSE server with command: /Users/morningstar/.nvm/versions/node/v22.14.0/bin/node /Users/morningstar/Port-Scanner/nx_mcp_server.js
+2025-04-28 15:04:43 [INFO] SSE server health check passed
+2025-04-28 15:04:43 [INFO] SSE server health check passed
+2025-04-28 15:04:43 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 15:04:43 [INFO] nx-mcp SSE server started successfully on port 9686
+2025-04-28 15:04:43 [INFO] nx-mcp server started successfully in daemon mode
+2025-04-28 15:04:43 [INFO] nx-mcp server started successfully in daemon mode

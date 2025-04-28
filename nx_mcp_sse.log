@@ -1,0 +1,49 @@
+2025-04-28T09:10:42.575Z - NX MCP Server running on port 9686
+2025-04-28T09:10:44.711Z - Received request: GET /health
+2025-04-28T09:10:44.712Z - Health check request served
+2025-04-28T09:11:30.717Z - Received SIGTERM, shutting down server...
+2025-04-28T09:11:50.477Z - NX MCP Server running on port 9686
+2025-04-28T09:11:52.520Z - Received request: GET /health
+2025-04-28T09:11:52.521Z - Health check request served
+2025-04-28T09:12:21.328Z - Received request: GET /health
+2025-04-28T09:12:21.328Z - Health check request served
+2025-04-28T09:13:05.388Z - Received request: GET /health
+2025-04-28T09:13:05.388Z - Health check request served
+2025-04-28T09:13:50.607Z - Received request: GET /health
+2025-04-28T09:13:50.607Z - Health check request served
+2025-04-28T09:16:30.861Z - Received SIGTERM, shutting down server...
+2025-04-28T09:16:32.655Z - NX MCP Server running on port 9686
+2025-04-28T09:16:34.707Z - Received request: GET /health
+2025-04-28T09:16:34.708Z - Health check request served
+2025-04-28T09:17:56.809Z - Received request: GET /sse
+2025-04-28T09:17:56.810Z - SSE connection established
+2025-04-28T09:18:06.812Z - Sent heartbeat message
+2025-04-28T09:18:16.813Z - Sent heartbeat message
+2025-04-28T09:18:26.814Z - Sent heartbeat message
+2025-04-28T09:18:36.815Z - Sent heartbeat message
+2025-04-28T09:18:46.815Z - Sent heartbeat message
+2025-04-28T09:18:56.815Z - Sent heartbeat message
+2025-04-28T09:19:06.817Z - Sent heartbeat message
+2025-04-28T09:19:16.818Z - Sent heartbeat message
+2025-04-28T09:19:26.819Z - Sent heartbeat message
+2025-04-28T09:19:36.820Z - Sent heartbeat message
+2025-04-28T09:19:46.821Z - Sent heartbeat message
+2025-04-28T09:19:56.821Z - Sent heartbeat message
+2025-04-28T09:20:06.822Z - Sent heartbeat message
+2025-04-28T09:20:16.824Z - Sent heartbeat message
+2025-04-28T09:32:32.690Z - Sent heartbeat message
+2025-04-28T09:32:42.691Z - Sent heartbeat message
+2025-04-28T09:32:52.693Z - Sent heartbeat message
+2025-04-28T09:33:02.694Z - Sent heartbeat message
+2025-04-28T09:33:12.694Z - Sent heartbeat message
+2025-04-28T09:33:22.695Z - Sent heartbeat message
+2025-04-28T09:33:32.696Z - Sent heartbeat message
+2025-04-28T09:33:42.697Z - Sent heartbeat message
+2025-04-28T09:33:52.697Z - Sent heartbeat message
+2025-04-28T09:34:02.698Z - Sent heartbeat message
+2025-04-28T09:34:12.698Z - Sent heartbeat message
+2025-04-28T09:34:22.699Z - Sent heartbeat message
+2025-04-28T09:34:23.249Z - Received SIGTERM, shutting down server...
+2025-04-28T09:34:40.968Z - NX MCP Server running on port 9686
+2025-04-28T09:34:43.015Z - Received request: GET /health
+2025-04-28T09:34:43.016Z - Health check request served
