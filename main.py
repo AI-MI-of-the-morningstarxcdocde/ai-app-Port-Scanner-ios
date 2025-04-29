@@ -8,7 +8,7 @@ Description: CLI and GUI launcher with modular scanning and wireless attack opti
 import argparse
 from scanner import port_scanner
 from wireless import wireless_attacks
-from gui import gui_app
+from gui import run_gui
 from utils import logger
 
 def main():
@@ -23,7 +23,7 @@ def main():
     logger.setup_logger()
 
     if args.mode == "gui":
-        gui_app.run_gui()
+        run_gui()
     else:
         if args.wireless_attack:
             if not args.target:

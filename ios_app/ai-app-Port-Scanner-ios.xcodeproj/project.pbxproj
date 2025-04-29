@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		20219FFF0464AE8BAD44CCC4 /* PortScanner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PortScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		20219FFF0464AE8BAD44CCC4 /* ai-app-Port-Scanner-ios.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ai-app-Port-Scanner-ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8800871F0FC96CB43A611BF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -55,18 +55,18 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		9947C1E4292BA8162CD7C4CD /* PortScanner */ = {
+		9947C1E4292BA8162CD7C4CD /* ai-app-Port-Scanner-ios */ = {
 			isa = PBXGroup;
 			children = (
 				074E6EF1F50263B753CFC833 /* Sources */,
 			);
-			path = PortScanner;
+			path = ai-app-Port-Scanner-ios;
 			sourceTree = "<group>";
 		};
 		DEBA162D83012288D579AF07 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				20219FFF0464AE8BAD44CCC4 /* PortScanner.app */,
+				20219FFF0464AE8BAD44CCC4 /* ai-app-Port-Scanner-ios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -74,7 +74,7 @@
 		DF5532008ACE10E1A20E33A0 = {
 			isa = PBXGroup;
 			children = (
-				9947C1E4292BA8162CD7C4CD /* PortScanner */,
+				9947C1E4292BA8162CD7C4CD /* ai-app-Port-Scanner-ios */,
 				DEBA162D83012288D579AF07 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,9 +103,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		19BC8AD770162E2CB8CF84A0 /* PortScanner */ = {
+		19BC8AD770162E2CB8CF84A0 /* ai-app-Port-Scanner-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CDE1F547EBA8DAE4DAA658F1 /* Build configuration list for PBXNativeTarget "PortScanner" */;
+			buildConfigurationList = CDE1F547EBA8DAE4DAA658F1 /* Build configuration list for PBXNativeTarget "ai-app-Port-Scanner-ios" */;
 			buildPhases = (
 				43BA28B17ED8056627D9925F /* Sources */,
 			);
@@ -113,11 +113,11 @@
 			);
 			dependencies = (
 			);
-			name = PortScanner;
+			name = ai-app-Port-Scanner-ios;
 			packageProductDependencies = (
 			);
-			productName = PortScanner;
-			productReference = 20219FFF0464AE8BAD44CCC4 /* PortScanner.app */;
+			productName = ai-app-Port-Scanner-ios;
+			productReference = 20219FFF0464AE8BAD44CCC4 /* ai-app-Port-Scanner-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -134,7 +134,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F7EC389C74E542BE03AF331C /* Build configuration list for PBXProject "PortScanner" */;
+			buildConfigurationList = F7EC389C74E542BE03AF331C /* Build configuration list for PBXProject "ai-app-Port-Scanner-ios" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -148,7 +148,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				19BC8AD770162E2CB8CF84A0 /* PortScanner */,
+				19BC8AD770162E2CB8CF84A0 /* ai-app-Port-Scanner-ios */,
 			);
 		};
 /* End PBXProject section */

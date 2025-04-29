@@ -193,91 +193,104 @@ def on_enter(event):
 def on_leave(event):
     event.widget.config(bg="#004400")
 
-# Apply hover effects to buttons
-for btn in [port_scan_button, wireless_attack_button, ar_start_button]:
-    btn.bind("<Enter>", on_enter)
-    btn.bind("<Leave>", on_leave)
+def schedule_scan(target, port_range, time_interval):
+    """Schedule a scan to run at regular intervals."""
+    print(f"Scheduling scan for {target} every {time_interval} seconds.")
+    # Implement scheduling logic here
+    return
 
-# Initialize the main GUI window
-root = tk.Tk()
-root.title("Advanced Port Scanner GUI")
-root.geometry("800x850")
-root.configure(bg="#000000")
+def view_scan_history():
+    """Display the scan history from logs."""
+    print("Displaying scan history...")
+    # Implement history viewing logic here
+    return
 
-tab_control = ttk.Notebook(root)
-tab_control.pack(expand=1, fill="both")
+def run_gui():
+    """Launch the GUI for the Advanced Port Scanner."""
+    root = tk.Tk()
+    root.title("Advanced Port Scanner and Wireless Attack Tool")
+    root.geometry("800x600")
 
-# Port Scan Tab
-port_scan_tab = ttk.Frame(tab_control)
-tab_control.add(port_scan_tab, text="Port Scan")
+    # Create and pack the widgets
+    tab_control = ttk.Notebook(root)
+    tab_control.pack(expand=1, fill="both")
 
-tk.Label(port_scan_tab, text="Target IP:", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold")).grid(row=0, column=0, padx=5, pady=5, sticky="e")
-port_target_entry = tk.Entry(port_scan_tab, width=40, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
-port_target_entry.grid(row=0, column=1, padx=5, pady=5)
+    # Port Scan Tab
+    port_scan_tab = ttk.Frame(tab_control)
+    tab_control.add(port_scan_tab, text="Port Scan")
 
-tk.Label(port_scan_tab, text="Port Range:", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold")).grid(row=1, column=0, padx=5, pady=5, sticky="e")
-port_range_entry = tk.Entry(port_scan_tab, width=40, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
-port_range_entry.grid(row=1, column=1, padx=5, pady=5)
-port_range_entry.insert(0, get_default_port_range())
+    tk.Label(port_scan_tab, text="Target IP:", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold")).grid(row=0, column=0, padx=5, pady=5, sticky="e")
+    port_target_entry = tk.Entry(port_scan_tab, width=40, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
+    port_target_entry.grid(row=0, column=1, padx=5, pady=5)
 
-port_scan_button = tk.Button(port_scan_tab, text="Start Scan", command=run_port_scan, bg="#004400", fg="#00FF00", font=("Consolas", 14, "bold"))
-port_scan_button.grid(row=2, column=0, columnspan=2, pady=10)
+    tk.Label(port_scan_tab, text="Port Range:", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold")).grid(row=1, column=0, padx=5, pady=5, sticky="e")
+    port_range_entry = tk.Entry(port_scan_tab, width=40, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
+    port_range_entry.grid(row=1, column=1, padx=5, pady=5)
+    port_range_entry.insert(0, get_default_port_range())
 
-port_progress_bar = AnimatedProgressBar(port_scan_tab, width=700, height=25)
-port_progress_bar.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
+    port_scan_button = tk.Button(port_scan_tab, text="Start Scan", command=run_port_scan, bg="#004400", fg="#00FF00", font=("Consolas", 14, "bold"))
+    port_scan_button.grid(row=2, column=0, columnspan=2, pady=10)
 
-port_elapsed_label = tk.Label(port_scan_tab, text="Elapsed Time: 0.0s", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold"))
-port_elapsed_label.grid(row=4, column=0, columnspan=2, pady=5)
+    port_progress_bar = AnimatedProgressBar(port_scan_tab, width=700, height=25)
+    port_progress_bar.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
 
-port_output_text = tk.Text(port_scan_tab, height=20, width=90, fg="#00FF00", bg="#000000", font=("Consolas", 11, "bold"), insertbackground="#00FF00")
-port_output_text.grid(row=5, column=0, columnspan=2, padx=5, pady=5)
-port_output_text.config(state=tk.DISABLED)
+    port_elapsed_label = tk.Label(port_scan_tab, text="Elapsed Time: 0.0s", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold"))
+    port_elapsed_label.grid(row=4, column=0, columnspan=2, pady=5)
 
-# Wireless Attack Tab
-wireless_tab = ttk.Frame(tab_control)
-tab_control.add(wireless_tab, text="Wireless Attack")
+    port_output_text = tk.Text(port_scan_tab, height=20, width=90, fg="#00FF00", bg="#000000", font=("Consolas", 11, "bold"), insertbackground="#00FF00")
+    port_output_text.grid(row=5, column=0, columnspan=2, padx=5, pady=5)
+    port_output_text.config(state=tk.DISABLED)
 
-tk.Label(wireless_tab, text="Target IP:", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold")).grid(row=0, column=0, padx=5, pady=5, sticky="e")
-wireless_target_entry = tk.Entry(wireless_tab, width=40, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
-wireless_target_entry.grid(row=0, column=1, padx=5, pady=5)
+    # Wireless Attack Tab
+    wireless_tab = ttk.Frame(tab_control)
+    tab_control.add(wireless_tab, text="Wireless Attack")
 
-wireless_attack_button = tk.Button(wireless_tab, text="Start Wireless Attack", command=run_wireless_attack, bg="#004400", fg="#00FF00", font=("Consolas", 14, "bold"))
-wireless_attack_button.grid(row=1, column=0, columnspan=2, pady=10)
+    tk.Label(wireless_tab, text="Target IP:", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold")).grid(row=0, column=0, padx=5, pady=5, sticky="e")
+    wireless_target_entry = tk.Entry(wireless_tab, width=40, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
+    wireless_target_entry.grid(row=0, column=1, padx=5, pady=5)
 
-wireless_progress_bar = AnimatedProgressBar(wireless_tab, width=700, height=25)
-wireless_progress_bar.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
+    wireless_attack_button = tk.Button(wireless_tab, text="Start Wireless Attack", command=run_wireless_attack, bg="#004400", fg="#00FF00", font=("Consolas", 14, "bold"))
+    wireless_attack_button.grid(row=1, column=0, columnspan=2, pady=10)
 
-wireless_elapsed_label = tk.Label(wireless_tab, text="Elapsed Time: 0.0s", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold"))
-wireless_elapsed_label.grid(row=3, column=0, columnspan=2, pady=5)
+    wireless_progress_bar = AnimatedProgressBar(wireless_tab, width=700, height=25)
+    wireless_progress_bar.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
 
-wireless_output_text = tk.Text(wireless_tab, height=20, width=90, fg="#00FF00", bg="#000000", font=("Consolas", 11, "bold"), insertbackground="#00FF00")
-wireless_output_text.grid(row=4, column=0, columnspan=2, padx=5, pady=5)
-wireless_output_text.config(state=tk.DISABLED)
+    wireless_elapsed_label = tk.Label(wireless_tab, text="Elapsed Time: 0.0s", fg="#00FF00", bg="#000000", font=("Consolas", 12, "bold"))
+    wireless_elapsed_label.grid(row=3, column=0, columnspan=2, pady=5)
 
-# Chatbot Tab
-chatbot_tab = ttk.Frame(tab_control)
-tab_control.add(chatbot_tab, text="Chatbot")
+    wireless_output_text = tk.Text(wireless_tab, height=20, width=90, fg="#00FF00", bg="#000000", font=("Consolas", 11, "bold"), insertbackground="#00FF00")
+    wireless_output_text.grid(row=4, column=0, columnspan=2, padx=5, pady=5)
+    wireless_output_text.config(state=tk.DISABLED)
 
-chatbot_output = tk.Text(chatbot_tab, height=20, width=90, fg="#00FF00", bg="#000000", font=("Consolas", 11, "bold"), insertbackground="#00FF00")
-chatbot_output.grid(row=0, column=0, padx=5, pady=5)
+    # Chatbot Tab
+    chatbot_tab = ttk.Frame(tab_control)
+    tab_control.add(chatbot_tab, text="Chatbot")
 
-chatbot_input = tk.Entry(chatbot_tab, width=90, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
-chatbot_input.grid(row=1, column=0, padx=5, pady=5)
-chatbot_input.bind("<Return>", lambda event: process_chat_input())
+    chatbot_output = tk.Text(chatbot_tab, height=20, width=90, fg="#00FF00", bg="#000000", font=("Consolas", 11, "bold"), insertbackground="#00FF00")
+    chatbot_output.grid(row=0, column=0, padx=5, pady=5)
 
-# AR Visualization Tab
-ar_tab = ttk.Frame(tab_control)
-tab_control.add(ar_tab, text="AR Visualization")
+    chatbot_input = tk.Entry(chatbot_tab, width=90, font=("Consolas", 12, "bold"), fg="#00FF00", bg="#000000", insertbackground="#00FF00")
+    chatbot_input.grid(row=1, column=0, padx=5, pady=5)
+    chatbot_input.bind("<Return>", lambda event: process_chat_input())
 
-ar_label = tk.Label(ar_tab, text="AR Network Visualization Placeholder", fg="#00FF00", bg="#000000", font=("Consolas", 14, "bold"))
-ar_label.pack(padx=10, pady=10)
+    # AR Visualization Tab
+    ar_tab = ttk.Frame(tab_control)
+    tab_control.add(ar_tab, text="AR Visualization")
 
-ar_start_button = tk.Button(ar_tab, text="Start AR Visualization", command=start_ar_visualization, bg="#004400", fg="#00FF00", font=("Consolas", 14, "bold"))
-ar_start_button.pack(pady=10)
+    ar_label = tk.Label(ar_tab, text="AR Network Visualization Placeholder", fg="#00FF00", bg="#000000", font=("Consolas", 14, "bold"))
+    ar_label.pack(padx=10, pady=10)
 
-# Auto-fill local IP in target fields
-local_ip = get_local_ip()
-port_target_entry.insert(0, local_ip)
-wireless_target_entry.insert(0, local_ip)
+    ar_start_button = tk.Button(ar_tab, text="Start AR Visualization", command=start_ar_visualization, bg="#004400", fg="#00FF00", font=("Consolas", 14, "bold"))
+    ar_start_button.pack(pady=10)
 
-root.mainloop()
+    # Additional UI/UX polish: add hover effects and tooltips for buttons
+    for btn in [port_scan_button, wireless_attack_button, ar_start_button]:
+        btn.bind("<Enter>", on_enter)
+        btn.bind("<Leave>", on_leave)
+
+    # Auto-fill local IP in target fields
+    local_ip = get_local_ip()
+    port_target_entry.insert(0, local_ip)
+    wireless_target_entry.insert(0, local_ip)
+
+    root.mainloop()

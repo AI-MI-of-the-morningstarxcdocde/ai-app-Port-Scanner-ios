@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const WebSocket = require('ws');
 
 // Setup logging
 const logFile = fs.createWriteStream(path.join(__dirname, 'nx_mcp_sse.log'), { flags: 'a' });
@@ -259,3 +260,26 @@ process.on('SIGTERM', () => {
   server.close();
   process.exit(0);
 });
+
+// WebSocket server for real-time communication
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws) => {
+    console.log('New client connected');
+
+    ws.on('message', (message) => {
+        console.log(`Received: ${message}`);
+        // Broadcast the message to all connected clients
+        wss.clients.forEach((client) => {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }
+        });
+    });
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
+});
+
+console.log('WebSocket server is running on ws://localhost:8080');

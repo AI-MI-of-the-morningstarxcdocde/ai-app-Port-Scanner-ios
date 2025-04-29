@@ -1,61 +1,156 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List, Optional
-import uvicorn
-from scanner.port_scanner import run_scan
-from wireless.wireless_attacks import run_attack
-from ai.predictive_model import predict_open_ports
-from utils.chatbot import Chatbot
+"""
+API Server for Advanced Port Scanner
+Author: morningstar
+Description: Provides a RESTful API for third-party integration with the Port Scanner
+"""
 
-app = FastAPI(title="Advanced Port Scanner API", version="1.0")
+from flask import Flask, request, jsonify
+import socket
+import threading
+import json
+from scanner.port_scanner import detect_service, validate_ssl_certificate, fingerprint_service
+from utils.blockchain_logging import BlockchainLogger
+import ipaddress
 
-chatbot = Chatbot()
+app = Flask(__name__)
 
-class ScanRequest(BaseModel):
-    target: str
-    ports: Optional[str] = "1-1000"
-    scan_type: Optional[str] = "all"
+# Authentication middleware (placeholder - implement proper auth in production)
+def require_api_key(view_function):
+    def decorated_function(*args, **kwargs):
+        api_key = request.headers.get('X-API-Key')
+        if not api_key or api_key != "YOUR_API_KEY":  # Replace with secure API key storage/validation
+            return jsonify({"error": "Invalid or missing API key"}), 401
+        return view_function(*args, **kwargs)
+    decorated_function.__name__ = view_function.__name__
+    return decorated_function
 
-class WirelessAttackRequest(BaseModel):
-    target: str
-
-class ChatbotRequest(BaseModel):
-    message: str
-
-@app.post("/scan/port")
-async def port_scan(request: ScanRequest):
+@app.route('/api/v1/scan', methods=['POST'])
+@require_api_key
+def start_scan():
+    """Start a port scan with the provided parameters."""
+    data = request.json
+    
+    # Validate required parameters
+    if not data or 'target' not in data:
+        return jsonify({"error": "Missing required parameter: target"}), 400
+    
+    target = data.get('target')
+    ports = data.get('ports', '1-1000')
+    scan_type = data.get('scan_type', 'tcp')
+    
+    # Validate IP address
     try:
+        ipaddress.ip_address(target)
+    except ValueError:
+        return jsonify({"error": "Invalid IP address"}), 400
+    
+    # Start scan in a separate thread
+    scan_id = str(hash(f"{target}_{ports}_{scan_type}"))
+    
+    def run_scan_thread():
         results = []
-        # run_scan yields (progress, line), collect lines
-        for progress, line in run_scan(request.target, request.scan_type):
-            results.append(line)
-        return {"target": request.target, "ports": request.ports, "scan_type": request.scan_type, "results": results}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        port_list = parse_ports(ports)
+        
+        for port in port_list:
+            try:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.settimeout(1)
+                    result = s.connect_ex((target, port))
+                    if result == 0:
+                        service = detect_service(port)
+                        results.append({
+                            "port": port,
+                            "status": "open",
+                            "service": service
+                        })
+            except Exception:
+                pass
+        
+        # Store results in a way that can be retrieved later
+        with open(f"scan_{scan_id}.json", "w") as f:
+            json.dump(results, f)
+        
+        # Log scan to blockchain
+        blockchain_logger = BlockchainLogger()
+        blockchain_logger.log_scan_result({
+            "scan_id": scan_id,
+            "target": target,
+            "ports": ports,
+            "scan_type": scan_type,
+            "result_count": len(results)
+        })
+    
+    threading.Thread(target=run_scan_thread).start()
+    
+    return jsonify({
+        "message": "Scan started successfully",
+        "scan_id": scan_id
+    })
 
-@app.post("/scan/predictive")
-async def predictive_scan(target: str):
+@app.route('/api/v1/scan/<scan_id>', methods=['GET'])
+@require_api_key
+def get_scan_results(scan_id):
+    """Get the results of a previously started scan."""
     try:
-        open_ports = predict_open_ports(target)
-        return {"target": target, "predicted_open_ports": open_ports}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        with open(f"scan_{scan_id}.json", "r") as f:
+            results = json.load(f)
+        return jsonify({"results": results})
+    except FileNotFoundError:
+        return jsonify({"error": "Scan not found"}), 404
 
-@app.post("/attack/wireless")
-async def wireless_attack(request: WirelessAttackRequest):
+@app.route('/api/v1/certificate', methods=['POST'])
+@require_api_key
+def validate_certificate():
+    """Validate an SSL/TLS certificate for a given hostname."""
+    data = request.json
+    
+    if not data or 'hostname' not in data:
+        return jsonify({"error": "Missing required parameter: hostname"}), 400
+    
+    hostname = data.get('hostname')
+    port = data.get('port', 443)
+    
     try:
-        run_attack(request.target)
-        return {"target": request.target, "status": "Wireless attack completed"}
+        result = validate_ssl_certificate(hostname, port)
+        return jsonify(result)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return jsonify({"error": str(e)}), 500
 
-@app.post("/chatbot")
-async def chatbot_interact(request: ChatbotRequest):
+@app.route('/api/v1/fingerprint', methods=['POST'])
+@require_api_key
+def fingerprint():
+    """Fingerprint a service to identify its version and OS."""
+    data = request.json
+    
+    if not data or 'ip' not in data or 'port' not in data:
+        return jsonify({"error": "Missing required parameters: ip and port"}), 400
+    
+    ip = data.get('ip')
+    port = data.get('port')
+    
     try:
-        response = chatbot.process_input(request.message)
-        return {"message": request.message, "response": response}
+        result = fingerprint_service(ip, port)
+        return jsonify(result)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return jsonify({"error": str(e)}), 500
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+def parse_ports(ports):
+    """Parse the ports string into a list of port numbers."""
+    port_list = []
+    if "," in ports:
+        parts = ports.split(",")
+        for part in parts:
+            if "-" in part:
+                start, end = part.split("-")
+                port_list.extend(range(int(start), int(end)+1))
+            else:
+                port_list.append(int(part))
+    elif "-" in ports:
+        start, end = ports.split("-")
+        port_list = list(range(int(start), int(end)+1))
+    else:
+        port_list = [int(ports)]
+    return port_list
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)

@@ -6,8 +6,26 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from scanner.port_scanner import run_scan  # Adjusted import based on the actual function
+from utils.blockchain_logging import BlockchainLogger
 
 class TestPortScanner(unittest.TestCase):
+    def test_log_scan_result(self):
+        """Test logging scan results to the blockchain."""
+        logger = BlockchainLogger()
+        scan_result = {
+            "target": "127.0.0.1",
+            "ports_scanned": 2,
+            "open_ports": [22, 80],
+            "scan_details": [
+                {"port": 22, "open": True, "service": "SSH", "vulnerability": "None"},
+                {"port": 80, "open": True, "service": "HTTP", "vulnerability": "None"}
+            ]
+        }
+        try:
+            logger.log_scan_result(scan_result)
+        except Exception as e:
+            self.fail(f"log_scan_result raised an exception: {str(e)}")
+
     def test_run_scan_valid(self):
         """Test scanning valid ports."""
         # Here we would need to capture printed output or refactor run_scan to return results

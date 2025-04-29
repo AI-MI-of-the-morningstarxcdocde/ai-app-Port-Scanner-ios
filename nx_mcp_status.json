@@ -1,1 +1,9 @@
-{"timestamp": 1745832883.016929, "running": true, "pid": 88299, "port": 9686}
+{
+  "server": "nx-mcp",
+  "status": "running",
+  "port": 9686,
+  "connections": 1,
+  "lastConnectionTime": "2025-04-28T14:52:45.037Z",
+  "startTime": "2025-04-28T13:53:56.976Z",
+  "uptime": "3528 seconds"
+}

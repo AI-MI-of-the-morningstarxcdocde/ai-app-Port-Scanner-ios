@@ -8,6 +8,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         "requests",
+        "python-nmap",
+        "shodan",
+        "fpdf",
+        "pandas",
     ],
     python_requires='>=3.7',
 )

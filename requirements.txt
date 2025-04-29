@@ -1,6 +1,5 @@
-nmap
+python-nmap
 requests
 shodan
-tkinter
 fpdf
 pandas
