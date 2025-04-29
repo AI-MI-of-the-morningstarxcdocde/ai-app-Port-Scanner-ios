@@ -1,4 +1,4 @@
-name: Advanced CI Pipeline
+name: "🚀 Advanced CI Pipeline - Build, Test & Deploy Your iOS & Python Project"
 
 on:
   push:
