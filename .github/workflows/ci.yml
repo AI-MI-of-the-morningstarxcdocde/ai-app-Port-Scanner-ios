@@ -31,6 +31,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: List installed Xcode versions
+        run: xcodebuild -version
+
+      - name: List available simulators
+        run: xcrun simctl list devices
+
       - name: Cache CocoaPods
         uses: actions/cache@v3
         with:
@@ -91,6 +97,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: List available Python versions
+        run: |
+          pyenv install --list
 
       - name: Cache Python packages
         uses: actions/cache@v3
