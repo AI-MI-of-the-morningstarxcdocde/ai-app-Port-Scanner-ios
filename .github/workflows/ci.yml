@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Advanced CI Pipeline
 
 on:
   push:
@@ -8,42 +8,78 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+
+env:
+  IOS_SCHEME: ai-app-Port-Scanner-ios
+  IOS_WORKSPACE: ios_app/ai-app-Port-Scanner-ios.xcworkspace
+  IOS_SDK: iphonesimulator
+  IOS_SIMULATORS: |
+    iPhone 14
+    iPhone 14 Pro
+    iPhone 14 Pro Max
 
 jobs:
   ios-build-test:
     name: Build and Test iOS App
     runs-on: macos-latest
+    strategy:
+      matrix:
+        simulator: [iPhone 14, iPhone 14 Pro, iPhone 14 Pro Max]
+        xcode-version: [15.0]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Xcode
+      - name: Cache CocoaPods
+        uses: actions/cache@v3
+        with:
+          path: ios_app/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios_app/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Set up Xcode ${{ matrix.xcode-version }}
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.0'
+          xcode-version: ${{ matrix.xcode-version }}
 
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
           pod install --project-directory=ios_app
 
-      - name: Build iOS app
+      - name: Build iOS app on ${{ matrix.simulator }}
         run: |
           xcodebuild clean build \
-            -workspace ios_app/ai-app-Port-Scanner-ios.xcworkspace \
-            -scheme ai-app-Port-Scanner-ios \
-            -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest' \
-            ONLY_ACTIVE_ARCH=NO
+            -workspace ${{ env.IOS_WORKSPACE }} \
+            -scheme ${{ env.IOS_SCHEME }} \
+            -sdk ${{ env.IOS_SDK }} \
+            -destination "platform=iOS Simulator,name=${{ matrix.simulator }},OS=latest" \
+            ONLY_ACTIVE_ARCH=NO | tee xcodebuild.log
+        continue-on-error: false
 
-      - name: Run iOS tests
+      - name: Upload build logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcodebuild-logs-${{ matrix.simulator }}
+          path: xcodebuild.log
+
+      - name: Run iOS tests on ${{ matrix.simulator }}
         run: |
           xcodebuild test \
-            -workspace ios_app/ai-app-Port-Scanner-ios.xcworkspace \
-            -scheme ai-app-Port-Scanner-ios \
-            -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest' \
-            ONLY_ACTIVE_ARCH=NO
+            -workspace ${{ env.IOS_WORKSPACE }} \
+            -scheme ${{ env.IOS_SCHEME }} \
+            -sdk ${{ env.IOS_SDK }} \
+            -destination "platform=iOS Simulator,name=${{ matrix.simulator }},OS=latest" \
+            ONLY_ACTIVE_ARCH=NO | tee xctest.log
+        continue-on-error: false
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: xctest-results-${{ matrix.simulator }}
+          path: xctest.log
 
   python-tests:
     name: Run Python Backend Tests
@@ -56,6 +92,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -66,9 +110,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Run tests with pytest
         run: |
-          pytest tests/
+          pytest tests/ --junitxml=results.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-results-${{ matrix.python-version }}
+          path: results.xml
 
   lint:
     name: Lint Python Code
@@ -85,7 +135,12 @@ jobs:
       - name: Install flake8
         run: pip install flake8
 
-      - name: Run flake8
+      - name: Run flake8 linter
         run: flake8 .
 
-  # Future jobs can be added here for deployment, notifications, etc.
+# Future enhancements:
+# - Add Slack or email notifications on failure/success
+# - Add deployment jobs
+# - Add reusable workflows for modularity
+# - Add code coverage reporting
+# - Add security scanning
