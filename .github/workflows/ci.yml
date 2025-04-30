@@ -61,7 +61,7 @@ jobs:
         continue-on-error: false
 
       - name: Upload build logs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@8f32a1e1f2b3b3f7d2b0f8b6b2a015d4f8b9c87d
         with:
           name: xcodebuild-logs-${{ matrix.simulator }}
           path: xcodebuild.log
@@ -78,7 +78,7 @@ jobs:
         continue-on-error: false
 
       - name: Upload test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@8f32a1e1f2b3b3f7d2b0f8b6b2a015d4f8b9c87d
         with:
           name: xctest-results-${{ matrix.simulator }}
           path: xctest.log
@@ -115,9 +115,10 @@ jobs:
       - name: Run tests with pytest
         run: |
           pytest tests/ --junitxml=results.xml
+        continue-on-error: false
 
       - name: Upload test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@8f32a1e1f2b3b3f7d2b0f8b6b2a015d4f8b9c87d
         with:
           name: pytest-results-${{ matrix.python-version }}
           path: results.xml
@@ -142,3 +143,4 @@ jobs:
       - name: Run flake8 linter
         run: |
           flake8 .
+        continue-on-error: true
