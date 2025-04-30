@@ -61,7 +61,7 @@ jobs:
         continue-on-error: false
 
       - name: Upload build logs
-        uses: actions/upload-artifact@8f32a1e1f2b3b3f7d2b0f8b6b2a015d4f8b9c87d
+        uses: actions/upload-artifact@v3
         with:
           name: xcodebuild-logs-${{ matrix.simulator }}
           path: xcodebuild.log
@@ -78,7 +78,7 @@ jobs:
         continue-on-error: false
 
       - name: Upload test results
-        uses: actions/upload-artifact@8f32a1e1f2b3b3f7d2b0f8b6b2a015d4f8b9c87d
+        uses: actions/upload-artifact@v3
         with:
           name: xctest-results-${{ matrix.simulator }}
           path: xctest.log
@@ -118,7 +118,7 @@ jobs:
         continue-on-error: false
 
       - name: Upload test results
-        uses: actions/upload-artifact@8f32a1e1f2b3b3f7d2b0f8b6b2a015d4f8b9c87d
+        uses: actions/upload-artifact@v3
         with:
           name: pytest-results-${{ matrix.python-version }}
           path: results.xml
