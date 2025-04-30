@@ -84,6 +84,11 @@ jobs:
           name: xctest-results-${{ matrix.simulator }}
           path: xctest.log
 
+      - name: Notify iOS build status
+        if: always()
+        run: echo "iOS build and test job completed."
+        continue-on-error: true
+
   python-tests:
     name: Run Python Backend Tests
     runs-on: ubuntu-latest
@@ -124,6 +129,11 @@ jobs:
         with:
           name: pytest-results-${{ matrix.python-version }}
           path: results.xml
+
+      - name: Notify Python test status
+        if: always()
+        run: echo "Python tests job completed."
+        continue-on-error: true
 
   lint:
     name: Lint Python Code
