@@ -60,7 +60,8 @@ jobs:
             ONLY_ACTIVE_ARCH=NO | tee xcodebuild.log
 
       - name: Upload build logs
-        uses: actions/upload-artifact@v3.1.2
+        if: success()
+        uses: actions/upload-artifact@v3
         with:
           name: xcodebuild-logs-${{ matrix.simulator }}
           path: xcodebuild.log
@@ -76,7 +77,8 @@ jobs:
             ONLY_ACTIVE_ARCH=NO | tee xctest.log
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3.1.2
+        if: success()
+        uses: actions/upload-artifact@v3
         with:
           name: xctest-results-${{ matrix.simulator }}
           path: xctest.log
@@ -119,7 +121,8 @@ jobs:
           pytest tests/ --junitxml=results.xml
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3.1.2
+        if: success()
+        uses: actions/upload-artifact@v3
         with:
           name: pytest-results-${{ matrix.python-version }}
           path: results.xml
