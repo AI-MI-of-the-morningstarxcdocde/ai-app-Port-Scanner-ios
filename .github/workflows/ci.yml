@@ -140,11 +140,5 @@ jobs:
           pip install flake8
 
       - name: Run flake8 linter
-        run: flake8 .
-
-# Future enhancements:
-# - Add Slack or email notifications on failure/success
-# - Add deployment jobs
-# - Add reusable workflows for modularity
-# - Add code coverage reporting
-# - Add security scanning
+        run: |
+          flake8 .
