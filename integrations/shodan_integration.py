@@ -2,12 +2,14 @@
 Shodan Integration Module
 Author: morningstar
 Poster: morningstar's Ethical Hacking Suite
-Description: Integration with Shodan API for enhanced scanning and data retrieval
+Description: Integration with Shodan API for enhanced scanning and data
+retrieval
 """
 
 import shodan
 
 API_KEY = "YOUR_SHODAN_API_KEY"  # Replace with your actual Shodan API key
+
 
 class ShodanIntegration:
     def __init__(self):

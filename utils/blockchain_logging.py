@@ -7,6 +7,7 @@ Description: Provides blockchain-backed logging for scan results.
 import hashlib
 import json
 
+
 class BlockchainLogger:
     def __init__(self):
         self.chain = []
@@ -16,7 +17,8 @@ class BlockchainLogger:
         block = {
             'index': len(self.chain) + 1,
             'data': data,
-            'previous_hash': previous_hash or self.hash(self.chain[-1]) if self.chain else '0',
+            'previous_hash': previous_hash or (self.hash(self.chain[-1])
+                                              if self.chain else '0'),
             'hash': None
         }
         block['hash'] = self.hash(block)
@@ -33,11 +35,13 @@ class BlockchainLogger:
 
     def get_chain(self):
         return self.chain
-    
+
     def log_threat_intelligence(threat_data):
         """Log threat intelligence data to the blockchain."""
-        block = {
+        block_data = {  # Renamed variable to avoid conflict
             'type': 'threat_intelligence',
             'data': threat_data
         }
-        return BlockchainLogger().create_block(data=block)
+        # It seems this method should be part of the class or static
+        # Assuming it should be a static method or part of an instance
+        return BlockchainLogger().create_block(data=block_data)
