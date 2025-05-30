@@ -18,7 +18,7 @@ class BlockchainLogger:
             'index': len(self.chain) + 1,
             'data': data,
             'previous_hash': previous_hash or (self.hash(self.chain[-1])
-                                              if self.chain else '0'),
+                                               if self.chain else '0'),
             'hash': None
         }
         block['hash'] = self.hash(block)

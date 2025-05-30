@@ -14,6 +14,7 @@ import ipaddress  # Importing ipaddress for IP validation
 from utils.blockchain_logging import BlockchainLogger
 import json  # Added for saving and loading port profiles
 import re  # Added for advanced fingerprinting
+import os  # For os.path.expanduser and os.makedirs
 
 COMMON_PORTS = [
     21, 22, 23, 25, 53, 80, 110, 143, 443, 3306, 8080, 8081, 8443, 8888
@@ -91,15 +92,17 @@ def run_scan(target: str, ports: str = "1-65535", scan_type: str = "all") -> Non
     threads = []
     # Determine ports to scan
     if ports == "ai":
+        # Local import to avoid circular dependency if predictive_model
+        # also uses parts of port_scanner.
         from ai.predictive_model import predict_open_ports
         port_list = predict_open_ports(target)
         print(f"AI-predicted open ports: {port_list}")
     else:
         # Parse ports string to list of ints
-        port_list = parse_ports_string(ports) # Refactored for clarity
+        port_list = parse_ports_string(ports)  # Refactored for clarity
 
-    for port in port_list:
-        t = threading.Thread(target=scan_port, args=(target, port, results))
+    for port_val in port_list:  # Renamed port to port_val
+        t = threading.Thread(target=scan_port, args=(target, port_val, results))
         threads.append(t)
         t.start()
     for t in threads:
@@ -133,7 +136,7 @@ def run_scan(target: str, ports: str = "1-65535", scan_type: str = "all") -> Non
 def parse_ports_string(ports_str: str) -> List[int]:
     """Parses a port string (e.g., "80,443,1000-2000") into a list of ints."""
     port_list_result = []
-    if ports_str == "all": # Handle "all" case for common ports
+    if ports_str == "all":  # Handle "all" case for common ports
         return COMMON_PORTS
     try:
         if "," in ports_str:
@@ -149,9 +152,9 @@ def parse_ports_string(ports_str: str) -> List[int]:
             port_list_result = list(range(int(start), int(end) + 1))
         else:
             port_list_result = [int(ports_str)]
-    except ValueError: # More specific exception
+    except ValueError:  # More specific exception
         print("Invalid port range format. Using default common ports.")
-        return COMMON_PORTS # Fallback to common ports
+        return COMMON_PORTS  # Fallback to common ports
     return port_list_result
 
 
@@ -197,7 +200,8 @@ def advanced_scan(target, port_range="1-65535", mode="default"):
     return
 
 
-def export_scan_results(results, format_type="json"): # Renamed format to format_type
+def export_scan_results(
+        results, format_type="json"):  # Renamed format to format_type
     """Export scan results to the specified format."""
     if format_type == "json":
         with open("scan_results.json", "w") as f:
@@ -238,10 +242,10 @@ def low_power_scan(target, port_range="1-1000"):
 
 
 # Added functionality to save and load custom port profiles
-def save_port_profile(profile_name, ports):
+def save_port_profile(profile_name, ports_data):  # Renamed ports
     """Save a custom port profile."""
     with open(f"{profile_name}.json", "w") as f:
-        json.dump(ports, f)
+        json.dump(ports_data, f)  # Ensure json is imported
     print(f"Port profile '{profile_name}' saved.")
 
 
@@ -262,19 +266,19 @@ def recommend_firewall_rules(scan_results):
     """Generate firewall rules based on scan results."""
     rules = []
     for result in scan_results:
-        if result["open"]: # Assuming result is a dict with "open" key
+        if result["open"]:  # Assuming result is a dict with "open" key
             rules.append(
                 f"Block incoming traffic on port {result['port']} "
-                f"({result['service']})"
+                f"({result['service']})"  # Example rule
             )
     return rules
 
 
 # Added reverse DNS lookup functionality
-def reverse_dns_lookup(ip):
+def reverse_dns_lookup(ip_address):  # Renamed ip
     """Perform a reverse DNS lookup for the given IP address."""
     try:
-        hostname = socket.gethostbyaddr(ip)[0]
+        hostname = socket.gethostbyaddr(ip_address)[0]
         return hostname
     except socket.herror:
         return "No PTR record found"
@@ -285,11 +289,10 @@ def export_scan_history_to_cloud(
         history_file="scan_blockchain_log.json"):
     """Export scan history to iCloud or other cloud services."""
     try:
-        import shutil
+        import shutil  # Local import
         # Ensure user's home directory is correctly expanded
         cloud_path = os.path.expanduser(
-            f"~/Library/Mobile Documents/com~apple~CloudDocs/{history_file}"
-        )
+            f"~/Library/Mobile Documents/com~apple~CloudDocs/{history_file}")
         # Ensure parent directory exists
         os.makedirs(os.path.dirname(cloud_path), exist_ok=True)
         shutil.copy(history_file, cloud_path)
@@ -299,12 +302,12 @@ def export_scan_history_to_cloud(
 
 
 # Added functionality for bandwidth usage analysis
-def analyze_bandwidth_usage(devices):
+def analyze_bandwidth_usage(devices_list):  # Renamed devices
     """Analyze bandwidth usage for the given devices."""
     print("Analyzing bandwidth usage...")
-    for device in devices:
-        print(f"Device: {device['ip']} - "
-              f"Bandwidth: {device['bandwidth']} Mbps")
+    for device_item in devices_list:  # Use new name
+        print(f"Device: {device_item['ip']} - "
+              f"Bandwidth: {device_item['bandwidth']} Mbps")
     # Placeholder for actual bandwidth analysis logic
     return
 
@@ -313,33 +316,33 @@ def analyze_bandwidth_usage(devices):
 def set_custom_alerts(scan_results, alert_conditions):
     """Set custom alerts based on specific scan outcomes."""
     alerts = []
-    for result in scan_results: # Assuming scan_results is a list of dicts
+    for result_item in scan_results:  # Renamed result
         for condition in alert_conditions:
-            if condition(result):
+            if condition(result_item):
                 alerts.append(
-                    f"Alert: Condition met for port {result['port']} "
-                    f"({result['service']})"
+                    f"Alert: Condition met for port {result_item['port']} "
+                    f"({result_item['service']})"
                 )
     return alerts
 
 
 # Enhanced multi-threaded scanning for faster results
-def multi_threaded_scan(target, ports_to_scan, thread_count=10): # Renamed ports
+def multi_threaded_scan(target, ports_to_scan, thread_count=10):  # Renamed ports
     """Perform a multi-threaded scan for faster results."""
-    from queue import Queue
+    from queue import Queue  # Local import
 
-    # results needs to be defined in this scope for worker to access
+    # scan_results_list needs to be defined in this scope for worker to access
     scan_results_list: List[Tuple[int, bool, Optional[str], Optional[str]]] = []
 
     def worker():
         while not port_queue.empty():
-            port = port_queue.get()
+            port_val = port_queue.get()  # Renamed port to port_val
             # scan_port appends to the list passed to it
-            scan_port(target, port, scan_results_list)
+            scan_port(target, port_val, scan_results_list)
             port_queue.task_done()
 
     port_queue = Queue()
-    for port_item in ports_to_scan: # Iterate over renamed ports_to_scan
+    for port_item in ports_to_scan:  # Iterate over renamed ports_to_scan
         port_queue.put(port_item)
 
     threads = []
@@ -348,18 +351,19 @@ def multi_threaded_scan(target, ports_to_scan, thread_count=10): # Renamed ports
         threads.append(t)
         t.start()
 
-    port_queue.join() # Wait for all tasks to be processed
+    port_queue.join()  # Wait for all tasks to be processed
 
     print("Multi-threaded scan completed.")
     return scan_results_list
 
 
 # Added functionality for customizable scan templates
-def save_scan_template(template_name, target, ports_config, options): # Renamed ports
+def save_scan_template(template_name, target,
+                       ports_config, options):  # Renamed ports
     """Save a scan template for recurring tasks."""
     template = {
         "target": target,
-        "ports": ports_config, # Use renamed ports_config
+        "ports": ports_config,  # Use renamed ports_config
         "options": options
     }
     with open(f"{template_name}.json", "w") as f:
@@ -382,10 +386,10 @@ def load_scan_template(template_name):
 # Added honeypot simulation functionality
 def simulate_honeypot(port, response_message="Unauthorized access detected"):
     """Simulate a honeypot to detect malicious activity on a specific port."""
-    # import socket # Already imported at top-level
+    # import socket  # Already imported at top-level
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(("0.0.0.0", port))
+        s.bind(("0.0.0.0", port))  # port is an argument
         s.listen(1)
         print(f"Honeypot active on port {port}")
 
@@ -399,7 +403,7 @@ def simulate_honeypot(port, response_message="Unauthorized access detected"):
 # Added advanced fingerprinting functionality
 def fingerprint_service(ip, port, banner=None):
     """Fingerprint a service to identify its version and OS accurately."""
-    # results dict init seems fine
+    # results_fp dict init seems fine
     results_fp = {"port": port, "ip": ip, "service": "Unknown",
                   "version": "Unknown", "os": "Unknown"}
 
@@ -411,10 +415,12 @@ def fingerprint_service(ip, port, banner=None):
         if "SSH" in banner:
             results_fp["service"] = "SSH"
             if "OpenSSH" in banner:
-                version_match = re.search(r"OpenSSH[_-](\d+\.\d+[^ ]*)", banner)
+                version_match = re.search(r"OpenSSH[_-](\d+\.\d+[^ ]*)",
+                                          banner)
                 if version_match:
                     results_fp["version"] = version_match.group(1)
-                results_fp["os"] = "Unix/Linux" if "Ubuntu" in banner else "Unknown"
+                results_fp["os"] = "Unix/Linux" if "Ubuntu" in banner else \
+                                   "Unknown"
         elif "HTTP" in banner or "Server:" in banner:
             results_fp["service"] = "HTTP"
             if "Apache" in banner:
@@ -435,25 +441,25 @@ def fingerprint_service(ip, port, banner=None):
     # Attempt OS fingerprinting based on TTL and response patterns
     try:
         # Send crafted packet and analyze response
-        s_fp = socket.socket() # Renamed to avoid conflict
+        s_fp = socket.socket()  # Renamed to avoid conflict
         s_fp.settimeout(1)
         s_fp.connect((ip, port))
         s_fp.send(b"HEAD / HTTP/1.0\r\n\r\n")
-        response = s_fp.recv(4096)
+        response_data = s_fp.recv(4096)  # Renamed response
         s_fp.close()
 
         # Analyze response headers for OS fingerprints
-        if b"Server:" in response:
-            if b"Ubuntu" in response or b"Debian" in response:
+        if b"Server:" in response_data:
+            if b"Ubuntu" in response_data or b"Debian" in response_data:
                 results_fp["os"] = "Linux"
-            elif b"Win" in response: # Broad check for Windows
+            elif b"Win" in response_data:  # Broad check for Windows
                 results_fp["os"] = "Windows"
-            elif b"FreeBSD" in response:
+            elif b"FreeBSD" in response_data:
                 results_fp["os"] = "FreeBSD"
-            elif b"Darwin" in response:
+            elif b"Darwin" in response_data:
                 results_fp["os"] = "macOS"
-    except socket.error: # More specific exception for socket errors
-        pass # Silently ignore if fingerprinting packet fails
+    except socket.error:  # More specific exception for socket errors
+        pass  # Silently ignore if fingerprinting packet fails
 
     return results_fp
 
@@ -495,14 +501,14 @@ def grab_banner_ipv6(ip, port):
         return None
 
 
-def run_ipv6_scan(target, ports_str="1-1000"): # Renamed ports to ports_str
+def run_ipv6_scan(target, ports_str="1-1000"):  # Renamed ports to ports_str
     """Run a port scan on IPv6 target address."""
     print(f"Scanning IPv6 target: {target}\n")
 
     # Validate the IPv6 address
     try:
         ipaddress.IPv6Address(target)
-    except ValueError: # More specific error
+    except ValueError:  # More specific error
         raise ValueError("Invalid IPv6 address provided.")
 
     scan_results_ipv6: List[Tuple[int, bool, Optional[str], Optional[str]]] = []
@@ -515,7 +521,7 @@ def run_ipv6_scan(target, ports_str="1-1000"): # Renamed ports to ports_str
                              args=(target, port_item, scan_results_ipv6))
         threads.append(t)
         t.start()
-    for t_item in threads: # Renamed t to t_item
+    for t_item in threads:  # Renamed t to t_item
         t_item.join()
 
     return scan_results_ipv6
@@ -527,9 +533,9 @@ def run_ipv6_scan(target, ports_str="1-1000"): # Renamed ports to ports_str
 def validate_ssl_certificate(hostname, port=443):
     """Validate the SSL/TLS certificate of a given hostname."""
     import ssl
-    # import socket # Already imported
+    # import socket  # Already imported
     import datetime
-    # import os # Not used here directly, but good for path manipulation if needed
+    # import os  # Not used here directly
 
     try:
         context = ssl.create_default_context()
@@ -544,21 +550,29 @@ def validate_ssl_certificate(hostname, port=443):
                     }
                 # Check if certificate has expired
                 # Handle cases where Z may not be present in timestamp
-                not_after_str = cert['notAfter'].replace(" GMT", "").replace(" UTC", "")
-                not_before_str = cert['notBefore'].replace(" GMT", "").replace(" UTC", "")
+                not_after_str = cert['notAfter'].replace(" GMT", "") \
+                    .replace(" UTC", "")
+                not_before_str = cert['notBefore'].replace(" GMT", "") \
+                    .replace(" UTC", "")
                 # More robust date parsing
                 try:
-                    not_after = datetime.datetime.strptime(not_after_str,
-                                                           "%b %d %H:%M:%S %Y")
-                    not_before = datetime.datetime.strptime(not_before_str,
-                                                            "%b %d %H:%M:%S %Y")
+                    not_after = datetime.datetime.strptime(
+                        not_after_str, "%b %d %H:%M:%S %Y"
+                    )
+                    not_before = datetime.datetime.strptime(
+                        not_before_str, "%b %d %H:%M:%S %Y"
+                    )
                 except ValueError:  # Fallback for different possible formats
-                    not_after = datetime.datetime.strptime(not_after_str,
-                                                           "%Y%m%d%H%M%SZ")
-                    not_before = datetime.datetime.strptime(not_before_str,
-                                                            "%Y%m%d%H%M%SZ")
+                    not_after = datetime.datetime.strptime(
+                        not_after_str, "%Y%m%d%H%M%SZ"
+                    )
+                    not_before = datetime.datetime.strptime(
+                        not_before_str, "%Y%m%d%H%M%SZ"
+                    )
 
-                now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+                now = datetime.datetime.now(datetime.timezone.utc).replace(
+                    tzinfo=None
+                )
 
                 is_valid = now > not_before and now < not_after
                 is_expired = now > not_after
@@ -581,5 +595,4 @@ def validate_ssl_certificate(hostname, port=443):
             "error": str(e), "valid": False
         }
 
-# Need to import os for os.path.expanduser and os.makedirs
-import os
+# import os # Moved to top

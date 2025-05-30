@@ -1,13 +1,11 @@
 platform :ios, '17.0'
 use_frameworks!
 
-workspace 'PortScanner'
-project 'PortScanner'
+workspace 'ai-app-Port-Scanner-ios'
+project 'ai-app-Port-Scanner-ios'
 
-target 'PortScanner' do
+target 'ai-app-Port-Scanner-ios' do
   # UI & Architecture
-  pod 'SwiftUI-Navigation'
-  pod 'Combine'
   
   # Network & Security
   pod 'Alamofire'
@@ -15,23 +13,15 @@ target 'PortScanner' do
   pod 'CryptoSwift'
   
   # AR & Visualization
-  pod 'ARKit-CoreLocation'
-  pod 'SceneKit'
   
   # Analytics & ML
   pod 'Firebase/Analytics'
-  pod 'CoreML'
   
   # Testing
-  target 'PortScannerTests' do
-    inherit! :search_paths
-    pod 'Quick'
-    pod 'Nimble'
-  end
-
-  target 'PortScannerUITests' do
-    inherit! :search_paths
-  end
+  # If tests are part of the main target or scheme, they might pick up these pods.
+  # If they are separate targets not defined here, this might not be enough.
+  pod 'Quick'
+  pod 'Nimble'
 end
 
 post_install do |installer|

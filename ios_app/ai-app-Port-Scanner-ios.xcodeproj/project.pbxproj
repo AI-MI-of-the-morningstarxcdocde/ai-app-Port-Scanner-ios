@@ -6,10 +6,28 @@
 	objectVersion = 54;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B515B4E2ADD93DAD068EA634 /* Pods_ai_app_Port_Scanner_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA2068F38B66855919D1F5E8 /* Pods_ai_app_Port_Scanner_ios.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		20219FFF0464AE8BAD44CCC4 /* ai-app-Port-Scanner-ios.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ai-app-Port-Scanner-ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		20219FFF0464AE8BAD44CCC4 /* ai-app-Port-Scanner-ios.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "ai-app-Port-Scanner-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F1C531B96A8C4A71FC1291A /* Pods-ai-app-Port-Scanner-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ai-app-Port-Scanner-ios.debug.xcconfig"; path = "Target Support Files/Pods-ai-app-Port-Scanner-ios/Pods-ai-app-Port-Scanner-ios.debug.xcconfig"; sourceTree = "<group>"; };
+		837A9D9776EBA14DAD06525E /* Pods-ai-app-Port-Scanner-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ai-app-Port-Scanner-ios.release.xcconfig"; path = "Target Support Files/Pods-ai-app-Port-Scanner-ios/Pods-ai-app-Port-Scanner-ios.release.xcconfig"; sourceTree = "<group>"; };
 		8800871F0FC96CB43A611BF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		EA2068F38B66855919D1F5E8 /* Pods_ai_app_Port_Scanner_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ai_app_Port_Scanner_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B09267AD77F4DFE6474B7178 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B515B4E2ADD93DAD068EA634 /* Pods_ai_app_Port_Scanner_ios.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		02F0F2294AD24FDEBC2CDC19 /* Wireless */ = {
@@ -37,6 +55,24 @@
 			path = AR;
 			sourceTree = "<group>";
 		};
+		351B5EBC25A036246E4842E3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA2068F38B66855919D1F5E8 /* Pods_ai_app_Port_Scanner_ios.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4488D023349C6D345FA40F1F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7F1C531B96A8C4A71FC1291A /* Pods-ai-app-Port-Scanner-ios.debug.xcconfig */,
+				837A9D9776EBA14DAD06525E /* Pods-ai-app-Port-Scanner-ios.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		8BC3B673EB446F71A2EA1BE2 /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -60,7 +96,7 @@
 			children = (
 				074E6EF1F50263B753CFC833 /* Sources */,
 			);
-			path = ai-app-Port-Scanner-ios;
+			path = "ai-app-Port-Scanner-ios";
 			sourceTree = "<group>";
 		};
 		DEBA162D83012288D579AF07 /* Products */ = {
@@ -76,6 +112,8 @@
 			children = (
 				9947C1E4292BA8162CD7C4CD /* ai-app-Port-Scanner-ios */,
 				DEBA162D83012288D579AF07 /* Products */,
+				4488D023349C6D345FA40F1F /* Pods */,
+				351B5EBC25A036246E4842E3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,16 +145,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CDE1F547EBA8DAE4DAA658F1 /* Build configuration list for PBXNativeTarget "ai-app-Port-Scanner-ios" */;
 			buildPhases = (
+				6CD3F22AED4533539229278D /* [CP] Check Pods Manifest.lock */,
 				43BA28B17ED8056627D9925F /* Sources */,
+				B09267AD77F4DFE6474B7178 /* Frameworks */,
+				5E091D02EE3869BF0C55D6A7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = ai-app-Port-Scanner-ios;
-			packageProductDependencies = (
-			);
-			productName = ai-app-Port-Scanner-ios;
+			name = "ai-app-Port-Scanner-ios";
+			productName = "ai-app-Port-Scanner-ios";
 			productReference = 20219FFF0464AE8BAD44CCC4 /* ai-app-Port-Scanner-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -145,6 +184,7 @@
 			mainGroup = DF5532008ACE10E1A20E33A0;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 54;
+			productRefGroup = DEBA162D83012288D579AF07 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -152,6 +192,48 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5E091D02EE3869BF0C55D6A7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ai-app-Port-Scanner-ios/Pods-ai-app-Port-Scanner-ios-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ai-app-Port-Scanner-ios/Pods-ai-app-Port-Scanner-ios-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ai-app-Port-Scanner-ios/Pods-ai-app-Port-Scanner-ios-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6CD3F22AED4533539229278D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ai-app-Port-Scanner-ios-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		43BA28B17ED8056627D9925F /* Sources */ = {
@@ -166,6 +248,7 @@
 /* Begin XCBuildConfiguration section */
 		10AEC4395E2D3E507CDD0835 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7F1C531B96A8C4A71FC1291A /* Pods-ai-app-Port-Scanner-ios.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -302,6 +385,7 @@
 		};
 		DE7E69016A725035039A8E2E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 837A9D9776EBA14DAD06525E /* Pods-ai-app-Port-Scanner-ios.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -320,7 +404,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CDE1F547EBA8DAE4DAA658F1 /* Build configuration list for PBXNativeTarget "PortScanner" */ = {
+		CDE1F547EBA8DAE4DAA658F1 /* Build configuration list for PBXNativeTarget "ai-app-Port-Scanner-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				10AEC4395E2D3E507CDD0835 /* Debug */,
@@ -329,7 +413,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		F7EC389C74E542BE03AF331C /* Build configuration list for PBXProject "PortScanner" */ = {
+		F7EC389C74E542BE03AF331C /* Build configuration list for PBXProject "ai-app-Port-Scanner-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A0BBD56CF40C511A19F630FE /* Debug */,

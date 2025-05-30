@@ -57,11 +57,12 @@ jobs:
             -scheme ${{ env.IOS_SCHEME }} \
             -sdk ${{ env.IOS_SDK }} \
             -destination "platform=iOS Simulator,name=${{ matrix.simulator }},OS=latest" \
-            ONLY_ACTIVE_ARCH=NO | tee xcodebuild.log
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO DEVELOPMENT_TEAM="" | tee xcodebuild.log
 
       - name: Upload build logs
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: xcodebuild-logs-${{ matrix.simulator }}
           path: xcodebuild.log
@@ -74,11 +75,12 @@ jobs:
             -scheme ${{ env.IOS_SCHEME }} \
             -sdk ${{ env.IOS_SDK }} \
             -destination "platform=iOS Simulator,name=${{ matrix.simulator }},OS=latest" \
-            ONLY_ACTIVE_ARCH=NO | tee xctest.log
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO DEVELOPMENT_TEAM="" | tee xctest.log
 
       - name: Upload test results
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: xctest-results-${{ matrix.simulator }}
           path: xctest.log
@@ -122,7 +124,7 @@ jobs:
 
       - name: Upload test results
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pytest-results-${{ matrix.python-version }}
           path: results.xml

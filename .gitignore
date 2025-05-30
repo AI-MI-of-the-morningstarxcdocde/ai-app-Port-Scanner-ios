@@ -1,4 +1,12 @@
-
 .nx/installation
 .nx/cache
 .nx/workspace-data
+
+# iOS specific
+ios_app/Pods/
+ios_app/build/
+*.xcworkspace
+xcuserdata/
+*.xcuserdatad
+DerivedData/
+[end of .gitignore]

@@ -37,9 +37,9 @@ def analyze_network_segmentation(devices):
         segments[segment].append(device)
 
     print("Network Segmentation Analysis:")
-    for segment, devices_in_segment in segments.items(): # Renamed devices
+    for segment, devices_in_segment in segments.items():  # Renamed devices
         print(f"Segment: {segment}")
-        for device in devices_in_segment: # Use new name
+        for device in devices_in_segment:  # Use new name
             print(f"  - Device: {device['ip']} ({device['hostname']})")
 
     # Placeholder for visualization logic

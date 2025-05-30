@@ -100,14 +100,17 @@ def run_port_scan(port_target_entry_widget, port_range_entry_widget,
         """Update the elapsed time label during the scan."""
         while not port_scan_done.is_set():
             elapsed = time.time() - start_time
-            port_elapsed_label_widget.config(text=f"Elapsed Time: {elapsed:.1f}s")
+            port_elapsed_label_widget.config(
+                text=f"Elapsed Time: {elapsed:.1f}s"
+            )
             time.sleep(0.1)
 
     def scan() -> None:
         """Perform the port scan using the scanning backend."""
         try:
             # Use "ai" mode to enable AI-driven predictive scanning
-            for progress, line in run_scan(target, "ai"): # target is from outer scope
+            # target is from outer scope
+            for progress, line in run_scan(target, "ai"):
                 port_output_text_widget.insert(tk.END, line + "\n")
                 port_output_text_widget.see(tk.END)
                 port_progress_bar_widget.update_progress(progress)
@@ -120,9 +123,7 @@ def run_port_scan(port_target_entry_widget, port_range_entry_widget,
             port_scan_done.set()
             elapsed = time.time() - start_time
             port_output_text_widget.insert(
-                tk.END,
-                f"\nScan completed in {elapsed:.2f} seconds.\n"
-            )
+                tk.END, f"\nScan completed in {elapsed:.2f} seconds.\n")
             port_scan_button_widget.config(state=tk.NORMAL)
             port_progress_bar_widget.update_progress(100)
             port_output_text_widget.config(state=tk.DISABLED)
@@ -175,12 +176,12 @@ def run_wireless_attack(wireless_target_entry_widget,
 
     def attack() -> None:
         """Perform the wireless attack using the wireless attacks module."""
-        class QueueLogger: # This can remain local
+        class QueueLogger:  # This can remain local
             def info(self, msg: str) -> None:
                 log_queue.put(msg)
         logger = QueueLogger()
         try:
-            run_attack(target) # target is from outer scope
+            run_attack(target)  # target is from outer scope
             logger.info("Wireless attack finished")
         except Exception as e:
             logger.info(f"Error: {e}")
@@ -206,7 +207,7 @@ def process_chat_input(chatbot_input_widget, chatbot_output_widget) -> None:
     user_input = chatbot_input_widget.get().strip()
     if not user_input:
         return
-    response = chatbot.process_input(user_input) # chatbot is global
+    response = chatbot.process_input(user_input)  # chatbot is global
     chatbot_output_widget.config(state=tk.NORMAL)
     chatbot_output_widget.insert(tk.END, f"> {user_input}\n{response}\n\n")
     chatbot_output_widget.see(tk.END)
@@ -221,13 +222,14 @@ def start_ar_visualization() -> None:
                         "Starting AR network visualization (placeholder).")
     # In a native app, this would launch ARKit-based visualization
     # Here we call the placeholder function
+    # Here we call the placeholder function
     ar_visualization.start_ar_visualization(None)
 
 
 # Additional UI/UX polish: add hover effects and tooltips for buttons
 
 
-def on_enter(event):
+def on_enter(event):  # Ensure two spaces before this comment
     event.widget.config(bg="#006600")
 
 
@@ -242,14 +244,14 @@ def schedule_scan(target, port_range, time_interval):
     return
 
 
-def view_scan_history():
+def view_scan_history():  # Ensure two spaces before this comment
     """Display the scan history from logs."""
     print("Displaying scan history...")
     # Implement history viewing logic here
     return
 
 
-def run_gui():
+def run_gui():  # Ensure two spaces before this comment
     """Launch the GUI for the Advanced Port Scanner."""
     root = tk.Tk()
     root.title("Advanced Port Scanner and Wireless Attack Tool")
