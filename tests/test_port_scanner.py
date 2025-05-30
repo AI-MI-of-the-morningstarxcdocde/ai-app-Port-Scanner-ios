@@ -1,12 +1,16 @@
-import unittest
 import sys
 import os
 
 # Add the project root directory to sys.path to fix import issues
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# This needs to be at the very top before other project imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                '..')))
 
-from scanner.port_scanner import run_scan  # Adjusted import based on the actual function
+import unittest
+# Adjusted import based on the actual function
+from scanner.port_scanner import run_scan
 from utils.blockchain_logging import BlockchainLogger
+
 
 class TestPortScanner(unittest.TestCase):
     def test_log_scan_result(self):
@@ -17,8 +21,10 @@ class TestPortScanner(unittest.TestCase):
             "ports_scanned": 2,
             "open_ports": [22, 80],
             "scan_details": [
-                {"port": 22, "open": True, "service": "SSH", "vulnerability": "None"},
-                {"port": 80, "open": True, "service": "HTTP", "vulnerability": "None"}
+                {"port": 22, "open": True, "service": "SSH",
+                 "vulnerability": "None"},
+                {"port": 80, "open": True, "service": "HTTP",
+                 "vulnerability": "None"}
             ]
         }
         try:
@@ -28,8 +34,9 @@ class TestPortScanner(unittest.TestCase):
 
     def test_run_scan_valid(self):
         """Test scanning valid ports."""
-        # Here we would need to capture printed output or refactor run_scan to return results
-        # For now, we will just check if it runs without error
+        # Here we would need to capture printed output or refactor run_scan
+        # to return results. For now, we will just check if it runs
+        # without error.
         try:
             run_scan("127.0.0.1", "22,80")  # Example IP and ports
         except Exception as e:
@@ -47,6 +54,7 @@ class TestPortScanner(unittest.TestCase):
             run_scan("127.0.0.1", "9999")  # Assuming port 9999 is closed
         except Exception as e:
             self.fail(f"run_scan raised an exception: {str(e)}")
+
 
 if __name__ == "__main__":
     unittest.main()

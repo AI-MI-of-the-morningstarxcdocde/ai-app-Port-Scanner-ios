@@ -9,6 +9,7 @@ import logging
 
 _logger = None
 
+
 def setup_logger():
     global _logger
     if _logger is None:
@@ -16,9 +17,12 @@ def setup_logger():
         _logger.setLevel(logging.DEBUG)
         ch = logging.StreamHandler()
         ch.setLevel(logging.DEBUG)
-        formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        formatter = logging.Formatter(
+            "%(asctime)s - %(levelname)s - %(message)s"
+        )
         ch.setFormatter(formatter)
         _logger.addHandler(ch)
+
 
 def get_logger():
     global _logger

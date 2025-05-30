@@ -2,6 +2,7 @@ import schedule
 import time
 from scanner.port_scanner import run_scan
 
+
 def schedule_scan(target, ports, interval):
     """Schedule a scan to run at regular intervals."""
     def job():

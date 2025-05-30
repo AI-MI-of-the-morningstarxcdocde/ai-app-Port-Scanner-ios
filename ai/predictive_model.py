@@ -6,6 +6,7 @@ Description: Implements machine learning model for predictive port scanning.
 
 import random
 
+
 def predict_open_ports(target_ip: str) -> list[int]:
     """
     Placeholder ML model that predicts likely open ports based on target IP.
