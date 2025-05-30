@@ -37,7 +37,7 @@ class NetworkTrafficAnalyzer:
                 print("Already capturing traffic.")
                 return False
 
-            import subprocess # Local import is fine for this method
+            import subprocess  # Local import is fine for this method
             import threading
             import time
 
@@ -94,12 +94,12 @@ class NetworkTrafficAnalyzer:
     def analyze_capture(self, pcap_file):
         """Analyze the captured packet file and extract insights."""
         try:
-            import subprocess # Local import
+            import subprocess  # Local import
 
             # Get a summary of the capture
             cmd = ["tcpdump", "-r", pcap_file, "-n", "-q"]
             result = subprocess.run(cmd, capture_output=True, text=True,
-                                    check=False) # check=False if non-zero is ok
+                                    check=False)  # check=False if non-zero is ok
 
             # Extract basic statistics
             packet_count = len(result.stdout.split('\n')) - 1
@@ -111,7 +111,7 @@ class NetworkTrafficAnalyzer:
 
             # Get unique IPs
             ip_pattern = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
-            import re # Local import
+            import re  # Local import
             unique_ips = set(re.findall(ip_pattern, result.stdout))
 
             analysis = {

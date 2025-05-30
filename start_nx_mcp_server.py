@@ -79,13 +79,14 @@ def start_daemon():
 # Redirect standard file descriptors
     sys.stdout.flush()
     sys.stderr.flush()
-    with open('/dev/null', 'r') as f:
-        os.dup2(f.fileno(), sys.stdin.fileno())
-    log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               "nx_mcp_server.log")
-    with open(log_file_path, 'a+') as f:
-        os.dup2(f.fileno(), sys.stdout.fileno())
-        os.dup2(f.fileno(), sys.stderr.fileno())
+    with open('/dev/null', 'r') as f_null:  # Renamed f to f_null
+        os.dup2(f_null.fileno(), sys.stdin.fileno())
+    log_file_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "nx_mcp_server.log"
+    )
+    with open(log_file_path, 'a+') as f_log:  # Renamed f to f_log
+        os.dup2(f_log.fileno(), sys.stdout.fileno())
+        os.dup2(f_log.fileno(), sys.stderr.fileno())
 # Write PID file
     with open(PID_FILE, 'w') as f:
         f.write(str(os.getpid()))
@@ -135,7 +136,9 @@ def check_if_port_in_use(port):
     try:
         # Find process using the port
         find_cmd = f"lsof -i tcp:{port} -t"
-        pid_str = subprocess.check_output(find_cmd, shell=True, text=True).strip()
+        pid_str = subprocess.check_output(
+            find_cmd, shell=True, text=True
+        ).strip()
         if pid_str:
             # Kill the process
             subprocess.run(f"kill -9 {pid_str}", shell=True, check=True)
@@ -144,7 +147,11 @@ def check_if_port_in_use(port):
             time.sleep(1)
             return check_port_available(port)
     except subprocess.CalledProcessError:
-        logging.warning("No process found using lsof, but port is still in use")
+        # No process found or error in lsof command
+        logging.warning(
+            "No process found using lsof, or error in command execution, "
+            "but port is still in use."  # Added period for consistency
+        )
     return False
 
 
@@ -170,7 +177,7 @@ def start_nx_server():
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            check=False # Don't raise exception on non-zero exit
+            check=False  # Don't raise exception on non-zero exit
         )
         # Check if daemon started successfully
         if process.returncode != 0:
@@ -198,7 +205,7 @@ const logMessage = (msg) => {
   const timestamp = new Date().toISOString();
   const logString = `${timestamp} - ${msg}\\n`;
   logFileStream.write(logString);
-  console.log(msg); // Also log to console if running in foreground
+  console.log(msg);  // Also log to console if running in foreground
 };
 
 // Create an SSE server on port 9686
@@ -211,7 +218,7 @@ const server = http.createServer((req, res) => {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
       'Connection': 'keep-alive',
-      'Access-Control-Allow-Origin': '*' // Allow all origins
+      'Access-Control-Allow-Origin': '*'  // Allow all origins
     });
 
     const initialMessage = { type: 'connection', status: 'connected' };
@@ -244,7 +251,7 @@ server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     logMessage('Port already in use, retrying in 5 seconds...');
     setTimeout(() => {
-      server.close(); // Ensure server is closed before retrying
+      server.close();  // Ensure server is closed before retrying
       server.listen(9686);
     }, 5000);
   }
@@ -270,7 +277,9 @@ process.on('SIGTERM', shutdown);
         node_cmd = ["node", str(sse_server_js)]
         logging.info(f"Starting SSE server with command: {' '.join(node_cmd)}")
         # Start SSE server process as detached and redirect output
-        node_log_file = open(os.path.join(script_dir, "node_server.log"), "a")
+        node_log_file = open(
+            os.path.join(script_dir, "node_server.log"), "a"
+        )
         # Get the full path to node executable
         node_path = subprocess.check_output(["which", "node"],
                                             text=True).strip()
@@ -298,13 +307,15 @@ process.on('SIGTERM', shutdown);
                 else:
                     logging.warning(
                         "SSE server health check failed with status "
-                        f"{health_response.getcode()}"
+                        f"{health_response.getcode()}"  # Use f-string
                     )
         except Exception as e:
             logging.warning(
                 f"SSE server health check couldn't be completed: {e}"
             )
-            logging.info("Continuing anyway as the process seems to have started")
+            logging.info(
+                "Continuing anyway as the process seems to have started"
+            )
         logging.info("nx-mcp SSE server started successfully on port 9686")
         return True
     except Exception as e:
@@ -334,13 +345,16 @@ def main():
         elif command == "stop":
             if stop_server():
                 # Also stop the Node.js server
-                node_pid_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "node_server.pid")
+                node_pid_file = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)),
+                    "node_server.pid")
                 if os.path.exists(node_pid_file):
                     try:
-                        with open(node_pid_file, 'r') as f:
-                            node_pid = int(f.read().strip())
+                        with open(node_pid_file, 'r') as f_pid:
+                            node_pid = int(f_pid.read().strip())
                         os.kill(node_pid, signal.SIGTERM)
-                        logging.info(f"Node.js server (PID {node_pid}) has been stopped.")
+                        logging.info(
+                            f"Node.js server (PID {node_pid}) has been stopped.")
                         os.remove(node_pid_file)
                     except (OSError, ValueError) as e:
                         logging.error(f"Error stopping Node.js server: {e}")
@@ -352,13 +366,20 @@ def main():
                 # Check if the SSE endpoint is responding
                 try:
                     import urllib.request
-                    response = urllib.request.urlopen("http://localhost:9686/health", timeout=3)
+                    response = urllib.request.urlopen(
+                        "http://localhost:9686/health", timeout=3
+                    )
                     if response.getcode() == 200:
                         logging.info("SSE server is responsive and healthy.")
                     else:
-                        logging.warning(f"SSE server returned status code {response.getcode()}")
+                        logging.warning(
+                            "SSE server returned status code "
+                            f"{response.getcode()}"
+                        )
                 except Exception as e:
-                    logging.warning(f"SSE server doesn't seem to be responding: {e}")
+                    logging.warning(
+                        f"SSE server doesn't seem to be responding: {e}"
+                    )
             else:
                 logging.info("Server is not running.")
         elif command == "restart":
@@ -366,10 +387,14 @@ def main():
             stop_server()
             time.sleep(1)
             if not check_if_port_in_use(9686):
-                logging.error("Unable to free port 9686 for restart. Exiting.")
+                logging.error(
+                    "Unable to free port 9686 for restart. Exiting."
+                )
                 sys.exit(1)
             pid = start_daemon()
-            logging.info(f"Starting nx-mcp server in daemon mode with PID {pid}")
+            logging.info(
+                f"Starting nx-mcp server in daemon mode with PID {pid}"
+            )
             success = start_nx_server()
             if success:
                 logging.info("nx-mcp server restarted successfully")
@@ -378,13 +403,18 @@ def main():
                 sys.exit(1)
         else:
             logging.error(f"Unknown command: {command}")
-            logging.info("Usage: python3 start_nx_mcp_server.py [start|stop|status|restart]")
+            logging.info(
+                "Usage: python3 start_nx_mcp_server.py "
+                "[start|stop|status|restart]"
+            )
             sys.exit(1)
     else:
         # No command provided, run in foreground mode
         if check_server_running():
             logging.info("Server is already running in daemon mode.")
-            logging.info("Use 'stop' command to stop it or 'restart' to restart it.")
+            logging.info(
+                "Use 'stop' command to stop it or 'restart' to restart it."
+            )
             sys.exit(0)
         if not check_if_port_in_use(9686):
             logging.error("Unable to free port 9686. Exiting.")
@@ -401,13 +431,17 @@ def main():
             except KeyboardInterrupt:
                 logging.info("Shutting down nx-mcp server...")
                 # Stop the Node.js server
-                node_pid_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "node_server.pid")
+                node_pid_file = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)),
+                    "node_server.pid")
                 if os.path.exists(node_pid_file):
                     try:
-                        with open(node_pid_file, 'r') as f:
-                            node_pid = int(f.read().strip())
+                        with open(node_pid_file, 'r') as f_pid:
+                            node_pid = int(f_pid.read().strip())
                         os.kill(node_pid, signal.SIGTERM)
-                        logging.info(f"Node.js server (PID {node_pid}) has been stopped.")
+                        logging.info(
+                            f"Node.js server (PID {node_pid}) has been stopped."
+                        )
                         os.remove(node_pid_file)
                     except (OSError, ValueError) as e:
                         logging.error(f"Error stopping Node.js server: {e}")

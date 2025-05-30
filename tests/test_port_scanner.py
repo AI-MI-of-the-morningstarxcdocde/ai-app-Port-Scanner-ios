@@ -7,7 +7,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                 '..')))
 
 import unittest
-# Adjusted import based on the actual function
 from scanner.port_scanner import run_scan
 from utils.blockchain_logging import BlockchainLogger
 
