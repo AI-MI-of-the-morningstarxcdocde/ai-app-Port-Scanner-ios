@@ -12,7 +12,8 @@ import json
 from scanner.port_scanner import (
     detect_service,
     validate_ssl_certificate,
-    fingerprint_service
+    fingerprint_service,
+    parse_ports_string
 )
 from utils.blockchain_logging import BlockchainLogger
 import ipaddress
@@ -25,6 +26,7 @@ from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_restx import Api, Resource, fields
+from typing import Callable, Any
 
 app = Flask(__name__)
 
@@ -48,9 +50,9 @@ limiter = Limiter(
 )
 
 # Authentication middleware (production-ready)
-def require_api_key(view_function):
+def require_api_key(view_function: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(view_function)
-    def decorated_function(*args, **kwargs):
+    def decorated_function(*args: Any, **kwargs: Any) -> Any:
         g.request_start_time = time.time()
         api_key = request.headers.get('X-API-Key')
         if not api_key or api_key != API_KEY:
@@ -77,7 +79,7 @@ scan_model = api.model('Scan', {
 @api.route('/health')
 class Health(Resource):
     @api.doc('health')
-    def get(self):
+    def get(self) -> dict[str, Any]:
         """Health check endpoint."""
         return {
             "status": "ok",
@@ -86,7 +88,7 @@ class Health(Resource):
 
 
 @app.errorhandler(Exception)
-def handle_exception(e):
+def handle_exception(e: Exception) -> Any:
     """Global error handler."""
     import traceback
     return jsonify({
@@ -100,7 +102,7 @@ def handle_exception(e):
 class Scan(Resource):
     @api.expect(scan_model)
     @require_api_key
-    def post(self):
+    def post(self) -> dict[str, Any]:
         """Start a port scan with the provided parameters."""
         data = request.json
 
@@ -120,7 +122,7 @@ class Scan(Resource):
 
         # Validate ports
         try:
-            port_list = parse_ports(ports)
+            port_list = parse_ports_string(ports)
             if not port_list or any(p < 1 or p > 65535 for p in port_list):
                 raise ValueError
         except Exception:
@@ -129,9 +131,9 @@ class Scan(Resource):
         # Start scan in a separate thread
         scan_id = str(hash(f"{target}_{ports}_{scan_type}"))
 
-        def run_scan_thread():
+        def run_scan_thread() -> None:
             results = []
-            port_list = parse_ports(ports)
+            port_list = parse_ports_string(ports)
 
             for port in port_list:
                 try:
@@ -172,7 +174,7 @@ class Scan(Resource):
 
 @app.route('/api/v1/scan/<scan_id>', methods=['GET'])
 @require_api_key
-def get_scan_results(scan_id):
+def get_scan_results(scan_id: str) -> Any:
     """Get the results of a previously started scan."""
     try:
         with open(f"scan_{scan_id}.json", "r") as f:
@@ -184,7 +186,7 @@ def get_scan_results(scan_id):
 
 @app.route('/api/v1/certificate', methods=['POST'])
 @require_api_key
-def validate_certificate():
+def validate_certificate() -> Any:
     """Validate an SSL/TLS certificate for a given hostname."""
     data = request.json
 
@@ -203,7 +205,7 @@ def validate_certificate():
 
 @app.route('/api/v1/fingerprint', methods=['POST'])
 @require_api_key
-def fingerprint():
+def fingerprint() -> Any:
     """Fingerprint a service to identify its version and OS."""
     data = request.json
 
@@ -222,23 +224,15 @@ def fingerprint():
         return jsonify({"error": str(e)}), 500
 
 
-def parse_ports(ports):
-    """Parse the ports string into a list of port numbers."""
-    port_list = []
-    if "," in ports:
-        parts = ports.split(",")
-        for part in parts:
-            if "-" in part:
-                start, end = part.split("-")
-                port_list.extend(range(int(start), int(end) + 1))
-            else:
-                port_list.append(int(part))
-    elif "-" in ports:
-        start, end = ports.split("-")
-        port_list = list(range(int(start), int(end) + 1))
-    else:
-        port_list = [int(ports)]
-    return port_list
+@api.route('/')
+class Root(Resource):
+    def get(self) -> dict[str, Any]:
+        """Root endpoint with welcome/info message and docs link."""
+        return {
+            "message": "Welcome to the Advanced Port Scanner API.",
+            "docs_url": "/docs",
+            "status": "ok"
+        }
 
 
 if __name__ == '__main__':
