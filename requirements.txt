@@ -8,3 +8,4 @@ Flask
 gunicorn
 flask-cors
 flask-limiter
+flask-restx

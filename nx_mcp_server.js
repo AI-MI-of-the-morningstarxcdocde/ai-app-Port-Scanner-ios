@@ -1,13 +1,13 @@
-require('dotenv').config();
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const WebSocket = require('ws');
+require("dotenv").config();
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
+const WebSocket = require("ws");
 
 // Setup logging
 const PORT = process.env.NODE_SERVER_PORT || 9686;
-const LOG_PATH = process.env.NODE_SERVER_LOG || path.join(__dirname, 'nx_mcp_sse.log');
-const logFile = fs.createWriteStream(LOG_PATH, { flags: 'a' });
+const LOG_PATH = process.env.NODE_SERVER_LOG || path.join(__dirname, "nx_mcp_sse.log");
+const logFile = fs.createWriteStream(LOG_PATH, { flags: "a" });
 function logMessage(msg) {
   const timestamp = new Date().toISOString();
   const logString = `${timestamp} - ${msg}\n`;
@@ -18,7 +18,7 @@ function logMessage(msg) {
 // Create a status tracker to monitor connections
 let connections = 0;
 let lastConnectionTime = null;
-const statusPath = path.join(__dirname, 'nx_mcp_status.json');
+const statusPath = path.join(__dirname, "nx_mcp_status.json");
 
 function updateStatus(connected = false) {
   if (connected) {
@@ -27,13 +27,13 @@ function updateStatus(connected = false) {
   }
   
   const status = {
-    server: 'nx-mcp',
-    status: 'running',
+    server: "nx-mcp",
+    status: "running",
     port: PORT,
     connections,
     lastConnectionTime,
     startTime: startTime.toISOString(),
-    uptime: Math.floor((Date.now() - startTime) / 1000) + ' seconds'
+    uptime: Math.floor((Date.now() - startTime) / 1000) + " seconds"
   };
   
   fs.writeFileSync(statusPath, JSON.stringify(status, null, 2));
@@ -183,62 +183,62 @@ const server = http.createServer((req, res) => {
   logMessage(`Received request: ${req.method} ${req.url}`);
   
   // Handle different routes
-  if (req.url === '/sse') {
+  if (req.url === "/sse") {
     // SSE endpoint
     res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-      'Access-Control-Allow-Origin': '*'
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+      "Access-Control-Allow-Origin": "*"
     });
     
     // Send an initial message
-    const initialMessage = { type: 'connection', status: 'connected', time: new Date().toISOString() };
+    const initialMessage = { type: "connection", status: "connected", time: new Date().toISOString() };
     res.write(`data: ${JSON.stringify(initialMessage)}\n\n`);
-    logMessage('SSE connection established');
+    logMessage("SSE connection established");
     updateStatus(true);
     
     // Keep the connection alive with periodic heartbeat messages
     const intervalId = setInterval(() => {
-      const heartbeatMsg = { type: 'heartbeat', timestamp: Date.now() };
+      const heartbeatMsg = { type: "heartbeat", timestamp: Date.now() };
       res.write(`data: ${JSON.stringify(heartbeatMsg)}\n\n`);
-      logMessage('Sent heartbeat message');
+      logMessage("Sent heartbeat message");
     }, 10000);
     
     // Handle client disconnect
-    req.on('close', () => {
+    req.on("close", () => {
       clearInterval(intervalId);
-      logMessage('Client disconnected from SSE');
+      logMessage("Client disconnected from SSE");
     });
-  } else if (req.url === '/health') {
+  } else if (req.url === "/health") {
     // Health check endpoint
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok', timestamp: Date.now() }));
-    logMessage('Health check request served');
-  } else if (req.url === '/status') {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ status: "ok", timestamp: Date.now() }));
+    logMessage("Health check request served");
+  } else if (req.url === "/status") {
     // Status endpoint
-    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.writeHead(200, { "Content-Type": "application/json" });
     const status = updateStatus();
     res.end(JSON.stringify(status));
-    logMessage('Status request served');
-  } else if (req.url === '/') {
+    logMessage("Status request served");
+  } else if (req.url === "/") {
     // Landing page
-    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.writeHead(200, { "Content-Type": "text/html" });
     res.end(landingPageHtml);
-    logMessage('Landing page served');
+    logMessage("Landing page served");
   } else {
     // 404 for any other paths
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('404 Not Found');
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("404 Not Found");
     logMessage(`404 for path ${req.url}`);
   }
 });
 
 // Error handling for the server
-server.on('error', (err) => {
+server.on("error", (err) => {
   logMessage(`Server error: ${err.message}`);
-  if (err.code === 'EADDRINUSE') {
-    logMessage('Port already in use, retrying in 5 seconds...');
+  if (err.code === "EADDRINUSE") {
+    logMessage("Port already in use, retrying in 5 seconds...");
     setTimeout(() => {
       server.close();
       server.listen(9686);
@@ -247,19 +247,19 @@ server.on('error', (err) => {
 });
 
 // Start the server
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, "0.0.0.0", () => {
   logMessage(`NX MCP Server running on port ${PORT}`);
 });
 
 // Handle process termination
-process.on('SIGINT', () => {
-  logMessage('Received SIGINT, shutting down server...');
+process.on("SIGINT", () => {
+  logMessage("Received SIGINT, shutting down server...");
   server.close();
   process.exit(0);
 });
 
-process.on('SIGTERM', () => {
-  logMessage('Received SIGTERM, shutting down server...');
+process.on("SIGTERM", () => {
+  logMessage("Received SIGTERM, shutting down server...");
   server.close();
   process.exit(0);
 });
@@ -267,10 +267,10 @@ process.on('SIGTERM', () => {
 // WebSocket server for real-time communication
 const wss = new WebSocket.Server({ port: 8080 });
 
-wss.on('connection', (ws) => {
-    console.log('New client connected');
+wss.on("connection", (ws) => {
+    console.log("New client connected");
 
-    ws.on('message', (message) => {
+    ws.on("message", (message) => {
         console.log(`Received: ${message}`);
         // Broadcast the message to all connected clients
         wss.clients.forEach((client) => {
@@ -280,9 +280,9 @@ wss.on('connection', (ws) => {
         });
     });
 
-    ws.on('close', () => {
-        console.log('Client disconnected');
+    ws.on("close", () => {
+        console.log("Client disconnected");
     });
 });
 
-console.log('WebSocket server is running on ws://localhost:8080');
+console.log("WebSocket server is running on ws://localhost:8080");
