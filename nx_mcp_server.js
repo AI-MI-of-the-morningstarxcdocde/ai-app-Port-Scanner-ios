@@ -1,10 +1,13 @@
+require('dotenv').config();
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const WebSocket = require('ws');
 
 // Setup logging
-const logFile = fs.createWriteStream(path.join(__dirname, 'nx_mcp_sse.log'), { flags: 'a' });
+const PORT = process.env.NODE_SERVER_PORT || 9686;
+const LOG_PATH = process.env.NODE_SERVER_LOG || path.join(__dirname, 'nx_mcp_sse.log');
+const logFile = fs.createWriteStream(LOG_PATH, { flags: 'a' });
 function logMessage(msg) {
   const timestamp = new Date().toISOString();
   const logString = `${timestamp} - ${msg}\n`;
@@ -26,7 +29,7 @@ function updateStatus(connected = false) {
   const status = {
     server: 'nx-mcp',
     status: 'running',
-    port: 9686,
+    port: PORT,
     connections,
     lastConnectionTime,
     startTime: startTime.toISOString(),
@@ -244,8 +247,8 @@ server.on('error', (err) => {
 });
 
 // Start the server
-server.listen(9686, '0.0.0.0', () => {
-  logMessage('NX MCP Server running on port 9686');
+server.listen(PORT, '0.0.0.0', () => {
+  logMessage(`NX MCP Server running on port ${PORT}`);
 });
 
 // Handle process termination

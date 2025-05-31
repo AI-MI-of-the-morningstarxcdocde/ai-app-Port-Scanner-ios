@@ -115,3 +115,23 @@ For support, please:
 - LocalAuthentication for biometric auth
 - Combine for reactive programming
 - SwiftUI for modern UI development
+
+## User Feedback
+
+To enable user feedback, add a button in your app that opens an email composer or a feedback form. Example (Swift):
+
+```swift
+import MessageUI
+
+struct FeedbackView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> MFMailComposeViewController {
+        let vc = MFMailComposeViewController()
+        vc.setToRecipients(["support@example.com"])
+        vc.setSubject("App Feedback")
+        return vc
+    }
+    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {}
+}
+```
+
+Or use a web form for anonymous feedback.

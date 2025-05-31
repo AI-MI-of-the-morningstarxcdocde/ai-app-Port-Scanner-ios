@@ -78,6 +78,25 @@ Build and run on your device or simulator.
 
 ---
 
+## 🔒 HTTPS Support (Local Development)
+
+For secure local testing, generate a self-signed certificate:
+
+```bash
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/CN=localhost"
+```
+
+Then run the API server with SSL:
+
+```python
+from api_server import app
+app.run(host='0.0.0.0', port=5000, ssl_context=('cert.pem', 'key.pem'))
+```
+
+For production, use a certificate from a trusted CA and set up a reverse proxy (e.g., Nginx).
+
+---
+
 ## 🎉 Contributing
 
 We welcome contributions! Please fork the repo, create a feature branch, and submit pull requests. For major changes, open an issue first to discuss.

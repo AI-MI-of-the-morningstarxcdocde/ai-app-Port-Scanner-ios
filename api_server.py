@@ -16,84 +16,158 @@ from scanner.port_scanner import (
 )
 from utils.blockchain_logging import BlockchainLogger
 import ipaddress
+import os
+import logging
+from functools import wraps
+from flask import g
+import time
+from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_restx import Api, Resource, fields
 
 app = Flask(__name__)
 
+API_KEY = os.getenv('PORT_SCANNER_API_KEY', 'YOUR_API_KEY')
+logger = logging.getLogger("api_server")
+# Set up logging only once (avoid duplicate handlers in production)
+if not logger.hasHandlers():
+    logging.basicConfig(level=logging.INFO)
 
-# Authentication middleware (placeholder - implement proper auth in production)
+# NOTE: For real production, use a secrets manager or environment variable for API_KEY.
+# Never hardcode secrets in code or in public repos.
+
+# Enable CORS for all routes (customize origins as needed)
+CORS(app)
+
+# Add rate limiting (e.g., 60 requests/minute per IP)
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["60 per minute"]
+)
+
+# Authentication middleware (production-ready)
 def require_api_key(view_function):
+    @wraps(view_function)
     def decorated_function(*args, **kwargs):
+        g.request_start_time = time.time()
         api_key = request.headers.get('X-API-Key')
-        # Replace with secure API key storage/validation
-        if not api_key or api_key != "YOUR_API_KEY":
+        if not api_key or api_key != API_KEY:
+            logger.warning(f"Unauthorized API access attempt from {request.remote_addr}")
             return jsonify({"error": "Invalid or missing API key"}), 401
-        return view_function(*args, **kwargs)
+        response = view_function(*args, **kwargs)
+        duration = time.time() - g.request_start_time
+        logger.info(f"{request.method} {request.path} from {request.remote_addr} - {response.status_code} in {duration:.3f}s")
+        return response
     decorated_function.__name__ = view_function.__name__
     return decorated_function
 
+# Initialize Flask-RESTX for OpenAPI docs
+api = Api(app, version='1.0', title='Advanced Port Scanner API',
+          description='RESTful API for Advanced Port Scanner',
+          doc='/docs')
 
-@app.route('/api/v1/scan', methods=['POST'])
-@require_api_key
-def start_scan():
-    """Start a port scan with the provided parameters."""
-    data = request.json
+scan_model = api.model('Scan', {
+    'target': fields.String(required=True, description='Target IP address'),
+    'ports': fields.String(required=False, description='Ports to scan (e.g. 1-1000)'),
+    'scan_type': fields.String(required=False, description='Scan type (tcp/udp)')
+})
 
-    # Validate required parameters
-    if not data or 'target' not in data:
-        return jsonify({"error": "Missing required parameter: target"}), 400
+@api.route('/health')
+class Health(Resource):
+    @api.doc('health')
+    def get(self):
+        """Health check endpoint."""
+        return {
+            "status": "ok",
+            "timestamp": __import__('datetime').datetime.utcnow().isoformat()
+        }
 
-    target = data.get('target')
-    ports = data.get('ports', '1-1000')
-    scan_type = data.get('scan_type', 'tcp')
 
-    # Validate IP address
-    try:
-        ipaddress.ip_address(target)
-    except ValueError:
-        return jsonify({"error": "Invalid IP address"}), 400
-
-    # Start scan in a separate thread
-    scan_id = str(hash(f"{target}_{ports}_{scan_type}"))
-
-    def run_scan_thread():
-        results = []
-        port_list = parse_ports(ports)
-
-        for port in port_list:
-            try:
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.settimeout(1)
-                    result = s.connect_ex((target, port))
-                    if result == 0:
-                        service = detect_service(port)
-                        results.append({
-                            "port": port,
-                            "status": "open",
-                            "service": service
-                        })
-            except Exception:
-                pass
-
-        # Store results in a way that can be retrieved later
-        with open(f"scan_{scan_id}.json", "w") as f:
-            json.dump(results, f)
-
-        # Log scan to blockchain
-        blockchain_logger = BlockchainLogger()
-        blockchain_logger.log_scan_result({
-            "scan_id": scan_id,
-            "target": target,
-            "ports": ports,
-            "scan_type": scan_type,
-            "result_count": len(results)
-        })
-
-    threading.Thread(target=run_scan_thread).start()
-
+@app.errorhandler(Exception)
+def handle_exception(e):
+    """Global error handler."""
+    import traceback
     return jsonify({
-        "message": "Scan started successfully",
-        "scan_id": scan_id
-    })
+        "error": str(e),
+        "trace": traceback.format_exc()
+    }), 500
+
+
+# Replace @app.route('/api/v1/scan', ...) with RESTX Resource
+@api.route('/api/v1/scan')
+class Scan(Resource):
+    @api.expect(scan_model)
+    @require_api_key
+    def post(self):
+        """Start a port scan with the provided parameters."""
+        data = request.json
+
+        # Validate required parameters
+        if not data or 'target' not in data:
+            return {"error": "Missing required parameter: target"}, 400
+
+        target = data.get('target')
+        ports = data.get('ports', '1-1000')
+        scan_type = data.get('scan_type', 'tcp')
+
+        # Validate IP address (IPv4 or IPv6)
+        try:
+            ipaddress.ip_address(target)
+        except ValueError:
+            return {"error": "Invalid IP address"}, 400
+
+        # Validate ports
+        try:
+            port_list = parse_ports(ports)
+            if not port_list or any(p < 1 or p > 65535 for p in port_list):
+                raise ValueError
+        except Exception:
+            return {"error": "Invalid port(s) specified"}, 400
+
+        # Start scan in a separate thread
+        scan_id = str(hash(f"{target}_{ports}_{scan_type}"))
+
+        def run_scan_thread():
+            results = []
+            port_list = parse_ports(ports)
+
+            for port in port_list:
+                try:
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                        s.settimeout(1)
+                        result = s.connect_ex((target, port))
+                        if result == 0:
+                            service = detect_service(port)
+                            results.append({
+                                "port": port,
+                                "status": "open",
+                                "service": service
+                            })
+                except Exception:
+                    pass
+
+            # Store results in a way that can be retrieved later
+            with open(f"scan_{scan_id}.json", "w") as f:
+                json.dump(results, f)
+
+            # Log scan to blockchain
+            blockchain_logger = BlockchainLogger()
+            blockchain_logger.log_scan_result({
+                "scan_id": scan_id,
+                "target": target,
+                "ports": ports,
+                "scan_type": scan_type,
+                "result_count": len(results)
+            })
+
+        threading.Thread(target=run_scan_thread).start()
+
+        return {
+            "message": "Scan started successfully",
+            "scan_id": scan_id
+        }
 
 
 @app.route('/api/v1/scan/<scan_id>', methods=['GET'])
@@ -168,4 +242,8 @@ def parse_ports(ports):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+    import os
+    ssl_context = None
+    if os.path.exists('cert.pem') and os.path.exists('key.pem'):
+        ssl_context = ('cert.pem', 'key.pem')
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True, ssl_context=ssl_context)

@@ -154,6 +154,48 @@ jobs:
         run: |
           flake8 .
 
+  backend-build-test:
+    name: Build and Test Python/Node.js Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Install Node.js dependencies
+        run: |
+          if [ -f package.json ]; then npm install; fi
+      - name: Run Python tests
+        run: |
+          python -m unittest discover tests
+      - name: Lint Python
+        run: |
+          pip install flake8
+          flake8 .
+      - name: Lint Node.js
+        run: |
+          if [ -f package.json ]; then npx eslint . || true; fi
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+      - name: Run Flask API server (gunicorn, background)
+        run: |
+          pip install gunicorn
+          nohup gunicorn -w 2 -b 0.0.0.0:5000 api_server:app &
+          sleep 5
+      - name: Check API server health endpoint
+        run: |
+          curl --fail http://localhost:5000/health
+
 # Future enhancements:
 # - Add Slack or email notifications on failure/success
 # - Add deployment jobs

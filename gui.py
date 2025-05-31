@@ -238,17 +238,54 @@ def on_leave(event):
 
 
 def schedule_scan(target, port_range, time_interval):
-    """Schedule a scan to run at regular intervals."""
-    print(f"Scheduling scan for {target} every {time_interval} seconds.")
-    # Implement scheduling logic here
-    return
+    """Schedule a scan to run at regular intervals (production-ready)."""
+    import threading
+    from utils.logger import get_logger
+    from scanner.port_scanner import run_scan
+    log = get_logger()
+    stop_event = threading.Event()
+
+    def scheduled_task():
+        while not stop_event.is_set():
+            try:
+                log.info(f"Scheduled scan for {target} ({port_range}) started.")
+                run_scan(target, port_range)
+                log.info(f"Scheduled scan for {target} completed.")
+            except Exception as e:
+                log.error(f"Error during scheduled scan: {e}")
+            stop_event.wait(time_interval)
+
+    t = threading.Thread(target=scheduled_task, daemon=True)
+    t.start()
+    print(f"Scheduled scan for {target} every {time_interval} seconds. Press Ctrl+C to stop.")
+    return stop_event
 
 
-def view_scan_history():  # Ensure two spaces before this comment
-    """Display the scan history from logs."""
-    print("Displaying scan history...")
-    # Implement history viewing logic here
-    return
+def view_scan_history():
+    """Display the scan history from blockchain logs (production-ready)."""
+    import json
+    import os
+    from tkinter import messagebox
+    log_path = os.path.join(os.path.dirname(__file__), 'scan_blockchain_log.json')
+    try:
+        if not os.path.exists(log_path):
+            messagebox.showinfo("Scan History", "No scan history found.")
+            return
+        with open(log_path, 'r') as f:
+            data = json.load(f)
+        if not data:
+            messagebox.showinfo("Scan History", "No scan history found.")
+            return
+        history = ""
+        for entry in data[-10:]:  # Show last 10 scans
+            ts = entry.get('timestamp', 'N/A')
+            target = entry['data'].get('target', 'N/A')
+            ports = entry['data'].get('ports_scanned', 'N/A')
+            open_ports = entry['data'].get('open_ports', [])
+            history += f"{ts}: Target {target}, Ports Scanned: {ports}, Open: {open_ports}\n"
+        messagebox.showinfo("Recent Scan History", history)
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to load scan history: {e}")
 
 
 def run_gui():  # Ensure two spaces before this comment

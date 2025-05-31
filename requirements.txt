@@ -3,3 +3,8 @@ requests
 shodan
 fpdf
 pandas
+python-dotenv
+Flask
+gunicorn
+flask-cors
+flask-limiter

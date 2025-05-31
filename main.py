@@ -11,6 +11,15 @@ from scanner import port_scanner
 from wireless import wireless_attacks
 from gui import run_gui
 from utils import logger
+import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv is optional for production, but recommended
+
+API_PORT = int(os.getenv('PORT_SCANNER_API_PORT', 5000))
+LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 
 
 def main():
@@ -46,4 +55,6 @@ def main():
 
 
 if __name__ == "__main__":
+    import logging
+    logging.basicConfig(level=LOG_LEVEL)
     main()
