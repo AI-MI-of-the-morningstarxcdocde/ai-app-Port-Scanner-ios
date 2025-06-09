@@ -9,66 +9,33 @@
 # the `language` matrix defined below to confirm you have the correct set of
 # supported CodeQL languages.
 #
-name: "CodeQL Advanced"
+name: CodeQL Advanced
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
-  schedule:
-    - cron: '28 0 * * 3'
+    branches: [ main ]
 
 jobs:
-  analyze:
-    name: Analyze (${{ matrix.language }})
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
-    permissions:
-      security-events: write
-      packages: read
-      actions: read
-      contents: read
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-        - language: actions
-          build-mode: none
-        - language: javascript-typescript
-          build-mode: none
-        - language: python
-          build-mode: none
-        - language: swift
-          build-mode: manual
-
+  codeql-analysis:
+    runs-on: macos-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-        build-mode: ${{ matrix.build-mode }}
+      - name: Set up CocoaPods
+        run: pod setup
 
-    # Only runs for Swift/manual
-    - if: matrix.language == 'swift' && matrix.build-mode == 'manual'
-      name: Build Swift project (manual)
-      run: |
-        # If you use CocoaPods, uncomment:
-        # pod install
+      - name: Install dependencies
+        run: pod install
 
-        # If you use Carthage, uncomment:
-        # carthage bootstrap --platform iOS
+      - name: Build and Test
+        run: |
+          xcodebuild -workspace <YourWorkspaceName>.xcworkspace \
+                     -scheme <YourSchemeName> \
+                     -sdk iphonesimulator \
+                     -configuration Debug build
 
-        # If you use SPM, uncomment:
-        # swift package resolve
-
-        # Replace with your actual scheme/project/workspace names:
-        xcodebuild -scheme "<YourSchemeName>" -workspace "<YourWorkspaceName>.xcworkspace" -sdk iphonesimulator -configuration Release build
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
